@@ -1,4 +1,5 @@
 import React from 'react';
+import SinglePhotoContainer from './SinglePhotoContainer';
 
 class UncategorizedPhotoContainer extends React.Component {
 
@@ -11,7 +12,7 @@ class UncategorizedPhotoContainer extends React.Component {
         </div>
         
         <div className="photo_list fancy_border_top full_width fl">
-
+          <SinglePhotoContainer />
         </div>
 
       </div>
