@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
+import axios from 'axios';
+
+import venueApi from './helpers/venueApi';
+
 import Header from './components/Header';
 import UncategorizedPhotoContainer from './components/UncategorizedPhotoContainer';
 import CenterToolbar from './components/CenterToolbar';
@@ -11,6 +15,16 @@ class App extends Component {
     this.state = {
       totalPhotosSelected: 0
     };
+  }
+
+  test = () => {
+    console.log("test");
+  }
+
+  getAdmins = () => {
+    axios.get(venueApi('venueadmins'))
+    .then((res) => console.log(res.data) )
+    .catch((err) => console.log(err.response.data) );
   }
 
   increasePhotosSelected = () => {
@@ -31,7 +45,8 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Header />
+        <p onClick={ () => this.getAdmins() }>CLICK ME</p>
+        <Header getAdmins={this.getAdmins}/>
         <UncategorizedPhotoContainer 
           totalPhotosSelected={this.totalPhotosSelected}
           increasePhotosSelected={this.increasePhotosSelected}

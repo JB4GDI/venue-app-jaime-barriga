@@ -2,6 +2,10 @@ import React from 'react';
 
 class Header extends React.Component {
 
+  componentWillMount() {
+    this.props.getAdmins();
+  }
+
   render() {
     return (
       <div className="header fl">
