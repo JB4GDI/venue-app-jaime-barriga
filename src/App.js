@@ -9,34 +9,35 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      photosSelected: 0
+      totalPhotosSelected: 0
     };
   }
 
-  photoSelected = () => {
+  increasePhotosSelected = () => {
     this.setState({
-      photosSelected: this.state.photosSelected + 1
+      totalPhotosSelected: this.state.totalPhotosSelected + 1
     });
   }
 
-  photoDeselected = () => {
+  decreasePhotosSelected = () => {
     this.setState({
-      photosSelected: this.state.photosSelected - 1
+      totalPhotosSelected: this.state.totalPhotosSelected - 1
     });
   }
 
   render() {
-    const { photosSelected } = this.state;
+    const { totalPhotosSelected } = this.state;
 
 
     return (
       <div className="App">
         <Header />
-        <UncategorizedPhotoContainer />
+        <UncategorizedPhotoContainer 
+          totalPhotosSelected={this.totalPhotosSelected}
+          increasePhotosSelected={this.increasePhotosSelected}
+          decreasePhotosSelected={this.decreasePhotosSelected}
+        />
         <CenterToolbar />
-        <ScrollablePhotoContainer />
-        <ScrollablePhotoContainer />
-        <ScrollablePhotoContainer />
       </div>
     );
   }
