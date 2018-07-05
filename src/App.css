@@ -1,28 +1,117 @@
-.App {
+/* GLOBAL OVERRIDES */
+
+h1 {
+  color: #474c48;
+  font-family: Playfair Display,Georgia,serif;
+  font-size: 30px;
+  font-weight: 300;
+  
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  color: #474c48;
+  font-family: Playfair Display,Georgia,serif;
+  font-size: 20px;
+  font-weight: 300;
+  
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  border-top: 4px solid #f5efed;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: #bea052;
+}
+
+p, textarea {
+  color: #474c48;
+  font-family: Maitree,Georgia,serif;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.5;
+  
+}
+
+/* CLASS OVERRIDES */
+
+.root {
+}
+
+.header {
+
+  height: 100px;
+  margin-left: 1.5%;
+  margin-right: 1.5%;
+  width: 97%;
+}
+
+.username {
+}
+
+.unassigned_photo_container {  
+  margin-left: 1.5%;
+  width: 400px;
+}
+
+.photo_list, .scrollable_photo_list {
+  background-color: #f5efed;
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+.scrollable_photo_list {
+  display: flex;
+  overflow-x: auto;
+  width: 780px;
+  height: 180px;
+}
+
+.single_photo_container {
+  margin-right: 5px;
+  width: 175px;
+}
+
+.photo_image {
+  display: block;
+  margin: auto;
+  height: 100px;
+  width: auto;
+}
+
+.photo_caption {
+  overflow-x: hidden; /* There are some instances where the text is the EXACT size as the textara, triggering an ugly scrollbar.  This fixes it. */
   text-align: center;
+  width: 170px;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.center_gap {
+  width: 3%;
+  height: 800px;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.scrollable_photo_container {
+
+  margin-bottom: 90px;  
+  overflow: auto;
+  position: relative;
+
 }
 
-.App-title {
-  font-size: 1.5em;
-}
+/* HELPER FUNCTIONS */
 
-.App-intro {
-  font-size: large;
-}
+.right_panel_width { width: 800px; }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
+.fancy_border_top { border-top: 1px dotted #c6c9c7; margin-top: 1px;}
+.fancy_border_bottom { border-bottom: 1px dotted #c6c9c7; }
+
+.fl { float:left; }
+.fr { float:right; }
+
+.full_width { width: 100%; }
