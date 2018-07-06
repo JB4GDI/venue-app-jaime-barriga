@@ -7,7 +7,10 @@ class ScrollablePhotoContainer extends React.Component {
     super(props);
     this.state = {
       photos: []
-    }
+    };
+
+    // Binding this allows us to call this function from a lower level and still have access to where we're at now
+    this.movePhotoLeft = this.movePhotoLeft.bind(this);
   }
 
   componentDidMount() {
@@ -26,6 +29,30 @@ class ScrollablePhotoContainer extends React.Component {
     };
 
     return photos.sort(comparePhotoRank);
+  }
+
+  movePhotoLeft(adminId, venueId, categoryId, photo, photoList) {
+
+    console.log(photoList);
+
+    var originalRightPhoto = photo;
+    var originalLeftPhoto = photoList[photo.rank - 2];
+    const newPhotoList = photoList;
+
+    originalRightPhoto.rank = originalRightPhoto.rank - 1;
+    originalLeftPhoto.rank = originalLeftPhoto.rank + 1;
+
+    // The information is swapped, so let's swap them in the photoList
+
+    console.log(photo.rank);
+
+    newPhotoList[photo.rank - 1] = originalRightPhoto
+    newPhotoList[photo.rank] = originalLeftPhoto    
+
+    console.log(newPhotoList);
+
+    this.setState({ photos: newPhotoList });
+
   }
 
   swapPhotos(adminId, venueId, categoryId) {
