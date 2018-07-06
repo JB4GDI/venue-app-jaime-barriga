@@ -24,16 +24,51 @@ class SinglePhotoContainer extends React.Component {
       this.setState({ singlePhotoSelected: false });
       this.props.decreasePhotosSelected();
     }
+  }
 
+  forcePhotoDeselect() {
+    this.setState({ singlePhotoSelected: false });
+  }
+
+  /* If selected, turn the background color to gold */
+  renderBackgroundColor() {
+    if (this.state.singlePhotoSelected === true) {
+      return "single_photo_container fl background_color_gold";
+    } else {
+      return "single_photo_container fl";
+    }
+  }
+
+  renderSinglePhotoImage(photo) {
+    return (
+      <img className="photo_image" src={"http://jaimebarriga.com/venues/" + photo.filename} onClick={() => this.toggleSinglePhotoSelected()} />
+    );
+  }
+
+  renderSinglePhotoCaption(photo) {
+    return (
+      <textarea className="photo_caption">{photo.caption}</textarea>
+    );
   }
 
   render () {
 
-    const { totalPhotosSelected, increasePhotosSelected, decreasePhotosSelected } = this.props;
+    const { 
+      photo,
+
+      adminId,
+      venueId,
+      categoryId,
+
+      increasePhotosSelected,
+      decreasePhotosSelected
+
+     } = this.props;
 
     return (
-      <div className="single_photo_container">
-        <img className="photo_image" src="http://jaimebarriga.com/venues/small_CB2_3596.jpg" onClick={() => this.toggleSinglePhotoSelected()}/>
+      <div className={ this.renderBackgroundColor() }>
+        {this.renderSinglePhotoImage(photo)}
+        {this.renderSinglePhotoCaption(photo)}
       </div>
     );
   }

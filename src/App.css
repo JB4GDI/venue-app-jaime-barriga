@@ -60,6 +60,10 @@ p, textarea {
   width: 400px;
 }
 
+.photo_list {
+  min-height: 180px;
+}
+
 .photo_list, .scrollable_photo_list {
   background-color: #f5efed;
   padding-top: 20px;
@@ -76,6 +80,7 @@ p, textarea {
 .single_photo_container {
   margin-right: 5px;
   width: 175px;
+  height: 160px;
 }
 
 .photo_image {
@@ -86,9 +91,10 @@ p, textarea {
 }
 
 .photo_caption {
+  height: 54px;
   overflow-x: hidden; /* There are some instances where the text is the EXACT size as the textara, triggering an ugly scrollbar.  This fixes it. */
   text-align: center;
-  width: 170px;
+  width: 170px;  
 }
 
 .center_gap {
@@ -115,3 +121,5 @@ p, textarea {
 .fr { float:right; }
 
 .full_width { width: 100%; }
+
+.background_color_gold { background-color: #bea052; }

@@ -5,16 +5,16 @@ import axios from 'axios';
 import venueApi from './helpers/venueApi';
 
 import Header from './components/Header';
-import UncategorizedPhotoContainer from './components/UncategorizedPhotoContainer';
-import CenterToolbar from './components/CenterToolbar';
-// import ScrollablePhotoContainer from './components/ScrollablePhotoContainer';
+import AdminsContainer from './components/AdminsContainer';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       totalPhotosSelected: 0,
-      venueAdmins: []
+      venueAdmins: [],
+      latestSelectedPhotoLocation: '',
+      listOfSelectedPhotos: []
     };
   }
 
@@ -28,11 +28,45 @@ class App extends Component {
     .catch((err) => console.log(err.response.data) );
   }
 
-  getAdmin = (id) => {
-    axios.get(venueApi(`venueadmins/${id}`))
+  getAdminById = (admin_id) => {
+    axios.get(venueApi(`venueadmins/${admin_id}`))
     .then((res) => this.setState({ venueAdmin: res.data }) )
     .catch((err) => console.log(err.response.data) );
   }
+
+  photoSelected = (photoLocation) => {
+    /* If the states are different */
+    if (this.state.latestSelectedPhotoLocation !== photoLocation) {
+
+    } else {
+      //Do nothing.
+    }
+  }
+
+  // getVenues = () => {
+
+  // }
+
+  // getVenueById = (id) => {
+
+  // }
+
+  // getCategories = () => {
+
+  // }
+
+  // getCategoryById = (id) => {
+
+  // }
+
+  // getPhotos = () => {
+
+  // }
+
+  // getPhotoById = (id) => {
+
+  // }
+
 
   increasePhotosSelected = () => {
     this.setState({
@@ -46,23 +80,31 @@ class App extends Component {
     });
   }
 
-  render() {
-    const { venueAdmins, totalPhotosSelected } = this.state;
+  /* 
 
+    There are two main blocks to this, application
+
+    1.  The Header
+    2.  Everything else.  We start the chain with the admin (AdminsContainer)
+
+  */
+  render() {
+
+    const { venueAdmins, totalPhotosSelected } = this.state;
 
     return (
       <div className="App">
         <Header
           venueAdmins={venueAdmins}
           getAdmins={this.getAdmins}
-          getAdmin={this.getAdmin}
+          getAdminById={this.getAdminById}
         />
-        <UncategorizedPhotoContainer 
-          totalPhotosSelected={this.totalPhotosSelected}
+        <AdminsContainer 
+          venueAdmins={venueAdmins}
+
           increasePhotosSelected={this.increasePhotosSelected}
           decreasePhotosSelected={this.decreasePhotosSelected}
         />
-        <CenterToolbar />
       </div>
     );
   }
