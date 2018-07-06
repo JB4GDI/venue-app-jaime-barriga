@@ -43,6 +43,18 @@ class App extends Component {
     }
   }
 
+  increasePhotosSelected = () => {
+    this.setState({
+      totalPhotosSelected: this.state.totalPhotosSelected + 1
+    });
+  }
+
+  decreasePhotosSelected = () => {
+    this.setState({
+      totalPhotosSelected: this.state.totalPhotosSelected - 1
+    });
+  }
+
   // getVenues = () => {
 
   // }
@@ -67,18 +79,14 @@ class App extends Component {
 
   // }
 
-
-  increasePhotosSelected = () => {
-    this.setState({
-      totalPhotosSelected: this.state.totalPhotosSelected + 1
-    });
+  updatePhoto = (adminId, venueId, categoryId, photo) => {
+    axios.patch(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photo.id}`), photo)
+    .then((res) => console.log("PhotoUpdated!"))
+    .catch((err) => console.log(err.response.data))
   }
 
-  decreasePhotosSelected = () => {
-    this.setState({
-      totalPhotosSelected: this.state.totalPhotosSelected - 1
-    });
-  }
+
+
 
   /* 
 
@@ -104,6 +112,8 @@ class App extends Component {
 
           increasePhotosSelected={this.increasePhotosSelected}
           decreasePhotosSelected={this.decreasePhotosSelected}
+
+          updatePhoto={this.updatePhoto}
         />
       </div>
     );

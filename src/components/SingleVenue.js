@@ -15,7 +15,8 @@ class SingleVenue extends React.Component {
       adminId,
       venueId,
       increasePhotosSelected,
-      decreasePhotosSelected
+      decreasePhotosSelected,
+      updatePhoto
     } = this.props;
 
     /* Yes, "Categorys" isn't spelled right, but I did it in the API to follow Ruby/Rails conventions */
@@ -31,6 +32,7 @@ class SingleVenue extends React.Component {
 
           increasePhotosSelected={this.props.increasePhotosSelected}
           decreasePhotosSelected={this.props.decreasePhotosSelected}
+          updatePhoto = {this.props.updatePhoto}
         />
       );
     });

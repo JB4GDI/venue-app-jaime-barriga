@@ -29,6 +29,7 @@ class CategoryContainer extends React.Component {
 
           increasePhotosSelected={this.props.increasePhotosSelected}
           decreasePhotosSelected={this.props.decreasePhotosSelected}
+          updatePhoto = {this.props.updatePhoto}
         />
       );
     } else {
@@ -45,6 +46,7 @@ class CategoryContainer extends React.Component {
 
           increasePhotosSelected={this.props.increasePhotosSelected}
           decreasePhotosSelected={this.props.decreasePhotosSelected}
+          updatePhoto = {this.props.updatePhoto}
         />
       );
     };
@@ -57,7 +59,8 @@ class CategoryContainer extends React.Component {
       adminId,
       venueId,
       increasePhotosSelected,
-      decreasePhotosSelected
+      decreasePhotosSelected,
+      updatePhoto
     } = this.props;
 
     return (

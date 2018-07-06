@@ -35,7 +35,8 @@ class UncategorizedPhotoContainer extends React.Component {
       categoryId,
 
       increasePhotosSelected,
-      decreasePhotosSelected
+      decreasePhotosSelected,
+      updatePhoto
 
      } = this.props;
 
@@ -48,10 +49,11 @@ class UncategorizedPhotoContainer extends React.Component {
 
           adminId={this.props.adminId}
           venueId={this.props.venueId}
-          categoryId={this.props.categoryid}
+          categoryId={this.props.categoryId}
 
           increasePhotosSelected={this.props.increasePhotosSelected}
           decreasePhotosSelected={this.props.decreasePhotosSelected}
+          updatePhoto = {this.props.updatePhoto}
         />
       );
     });
@@ -65,7 +67,7 @@ class UncategorizedPhotoContainer extends React.Component {
           </div>
           
           <div className="photo_list fancy_border_top full_width fl">
-            {allPhotos}            
+            {allPhotos}
           </div>
 
         </div>

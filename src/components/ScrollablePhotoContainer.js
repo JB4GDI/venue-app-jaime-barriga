@@ -28,7 +28,8 @@ class ScrollablePhotoContainer extends React.Component {
       categoryId,
 
       increasePhotosSelected,
-      decreasePhotosSelected
+      decreasePhotosSelected,
+      updatePhoto
 
      } = this.props;
 
@@ -41,10 +42,11 @@ class ScrollablePhotoContainer extends React.Component {
 
           adminId={this.props.adminId}
           venueId={this.props.venueId}
-          categoryId={this.props.categoryid}
+          categoryId={this.props.categoryId}
 
           increasePhotosSelected={this.props.increasePhotosSelected}
           decreasePhotosSelected={this.props.decreasePhotosSelected}
+          updatePhoto = {this.props.updatePhoto}
         />
       );
     });

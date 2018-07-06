@@ -15,7 +15,8 @@ class VenuesContainer extends React.Component {
       venueAdmin,
       adminId,
       increasePhotosSelected,
-      decreasePhotosSelected 
+      decreasePhotosSelected,
+      updatePhoto
     } = this.props;
 
     const venues = venueAdmin.venues.map((venues, index) => {
@@ -30,6 +31,7 @@ class VenuesContainer extends React.Component {
 
           increasePhotosSelected={this.props.increasePhotosSelected}
           decreasePhotosSelected={this.props.decreasePhotosSelected}
+          updatePhoto = {this.props.updatePhoto}
         />
       );
     });

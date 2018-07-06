@@ -27,7 +27,11 @@ class SinglePhotoContainer extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log("saved!");
+
+    this.props.photo.caption = this.content.value;  // We are saving, so take the value we entered and make that the new caption
+
+    this.props.updatePhoto(this.props.adminId, this.props.venueId, this.props.categoryId, this.props.photo);
+    
     this.hideCaptionSaveButton();
   }
 
@@ -74,7 +78,13 @@ class SinglePhotoContainer extends React.Component {
         className="photo-caption-textbox"
         onSubmit={(e) => this.onSubmit(e)}
       >
-        <textarea className="photo_caption" onChange={() => this.showCaptionSaveButton()}>{photo.caption}</textarea>
+        <textarea 
+          className="photo_caption"
+          onChange={() => this.showCaptionSaveButton()}
+          ref={(input) => this.content = input}
+          defaultValue={photo.caption}
+        >          
+        </textarea>
         {this.renderSaveButton()}
       </form>
       
@@ -91,7 +101,8 @@ class SinglePhotoContainer extends React.Component {
       categoryId,
 
       increasePhotosSelected,
-      decreasePhotosSelected
+      decreasePhotosSelected,
+      updatePhoto
 
      } = this.props;
 
