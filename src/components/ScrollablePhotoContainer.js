@@ -3,7 +3,19 @@ import SinglePhotoContainer from './SinglePhotoContainer';
 
 class ScrollablePhotoContainer extends React.Component {
 
+  /* The rank of the photos is super important.  We use this function to sort the photos by rank */
+  sortPhotos(photos) {
 
+    function comparePhotoRank(a,b) {
+      if (a.rank < b.rank)
+        return -1;
+      if (a.rank > b.rank)
+        return 1;
+      return 0;
+    };
+
+    return photos.sort(comparePhotoRank);
+  }
 
   render () {
 
@@ -20,17 +32,17 @@ class ScrollablePhotoContainer extends React.Component {
 
      } = this.props;
 
-    const allPhotos = photos.map((photo, index) => {
+    const allPhotos = this.sortPhotos(photos).map((photo, index) => {
       return (
         <SinglePhotoContainer
-          key={index}
-          index={index}          
+          key={photo.rank - 1}
+          index={photo.rank - 1}
           photo={photo}
 
           adminId={this.props.adminId}
           venueId={this.props.venueId}
           categoryId={this.props.categoryid}
-          
+
           increasePhotosSelected={this.props.increasePhotosSelected}
           decreasePhotosSelected={this.props.decreasePhotosSelected}
         />

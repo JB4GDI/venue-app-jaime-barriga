@@ -4,8 +4,31 @@ class SinglePhotoContainer extends React.Component {
   constructor() {
     super();
     this.state = {
-      singlePhotoSelected: false // Is the photo selected (clicked on) or not?
+      singlePhotoSelected: false, // Is the photo selected (clicked on) or not?
+      showCaptionSaveButton: false
     };
+  }
+
+  showCaptionSaveButton() {
+    this.setState({ showCaptionSaveButton: true });
+  }
+
+  hideCaptionSaveButton() {
+    this.setState({ showCaptionSaveButton: false });
+  }
+
+  renderSaveButton() {
+    if (this.state.showCaptionSaveButton === true) {
+      return (<input className="savebutton" type="submit" value="SAVE" />);
+    } else {
+      return (<input className="savebutton hidden" type="submit" value="SAVE" />);
+    }
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    console.log("saved!");
+    this.hideCaptionSaveButton();
   }
 
   /* 
@@ -47,7 +70,14 @@ class SinglePhotoContainer extends React.Component {
 
   renderSinglePhotoCaption(photo) {
     return (
-      <textarea className="photo_caption">{photo.caption}</textarea>
+      <form
+        className="photo-caption-textbox"
+        onSubmit={(e) => this.onSubmit(e)}
+      >
+        <textarea className="photo_caption" onChange={() => this.showCaptionSaveButton()}>{photo.caption}</textarea>
+        {this.renderSaveButton()}
+      </form>
+      
     );
   }
 
@@ -67,8 +97,10 @@ class SinglePhotoContainer extends React.Component {
 
     return (
       <div className={ this.renderBackgroundColor() }>
+
         {this.renderSinglePhotoImage(photo)}
         {this.renderSinglePhotoCaption(photo)}
+
       </div>
     );
   }
