@@ -28,7 +28,7 @@ class ScrollablePhotoContainer extends React.Component {
     return photos.sort(comparePhotoRank);
   }
 
-  swapPhotos() {
+  swapPhotos(adminId, venueId, categoryId) {
 
     var allPhotos = this.state.photos;
 
@@ -43,6 +43,9 @@ class ScrollablePhotoContainer extends React.Component {
 
     allPhotos[0] = photo2;
     allPhotos[1] = photo1;
+
+    this.props.updatePhoto(adminId, venueId, categoryId, photo1);
+    this.props.updatePhoto(adminId, venueId, categoryId, photo2);
 
     this.setState({ photos: allPhotos });
 
@@ -70,6 +73,8 @@ class ScrollablePhotoContainer extends React.Component {
           key={photo.rank - 1}
           index={photo.rank - 1}
           photo={photo}
+          photoOnLeft={photos[photo.rank - 2]}
+          photoOnRight={photos[photo.rank + 2]}
           photoList={this.props.photos}
           currentHighestPhotoRank = {photos[photos.length-1].rank}
 
@@ -96,7 +101,7 @@ class ScrollablePhotoContainer extends React.Component {
           {allPhotos}
         </div>
 
-        <div onClick={() => this.swapPhotos()}>Hello</div>
+        <div onClick={() => this.swapPhotos(adminId, venueId, categoryId)}>Hello</div>
 
       </div>
     );

@@ -157,8 +157,6 @@ class SinglePhotoContainer extends React.Component {
 
   renderSinglePhotoCaption(photo) {
 
-    console.log("Rendering: " + photo.rank + " " + photo.caption);
-
     if (photo.caption === '') {
       return (
         <form
@@ -194,9 +192,6 @@ class SinglePhotoContainer extends React.Component {
         
       );
     }
-
-
-
   }
 
   render () {
@@ -213,7 +208,9 @@ class SinglePhotoContainer extends React.Component {
       increasePhotosSelected,
       decreasePhotosSelected,
       updatePhoto,
-      movePhotoLeft
+      movePhotoLeft,
+      photoOnLeft,
+      photoOnRight
 
      } = this.props;
 
