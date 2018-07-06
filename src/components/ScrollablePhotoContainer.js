@@ -31,9 +31,10 @@ class ScrollablePhotoContainer extends React.Component {
     return photos.sort(comparePhotoRank);
   }
 
+  /*
+    Given a photo "photo", find the photo to its left, and have them swap places.
+  */
   movePhotoLeft(adminId, venueId, categoryId, photo, photoList) {
-
-    console.log(photoList);
 
     var originalRightPhoto = photo;
     var originalLeftPhoto = photoList[photo.rank - 2];
@@ -44,15 +45,15 @@ class ScrollablePhotoContainer extends React.Component {
 
     // The information is swapped, so let's swap them in the photoList
 
-    console.log(photo.rank);
-
     newPhotoList[photo.rank - 1] = originalRightPhoto
     newPhotoList[photo.rank] = originalLeftPhoto    
 
-    console.log(newPhotoList);
+    // Update the API with the new information
 
     this.props.updatePhoto(adminId, venueId, categoryId, originalLeftPhoto);
     this.props.updatePhoto(adminId, venueId, categoryId, originalRightPhoto);
+
+    // Update the application state with the new information
 
     this.setState({ photos: newPhotoList });
 
