@@ -51,32 +51,35 @@ class ScrollablePhotoContainer extends React.Component {
 
     console.log(newPhotoList);
 
+    this.props.updatePhoto(adminId, venueId, categoryId, originalLeftPhoto);
+    this.props.updatePhoto(adminId, venueId, categoryId, originalRightPhoto);
+
     this.setState({ photos: newPhotoList });
 
   }
 
-  swapPhotos(adminId, venueId, categoryId) {
+  // swapPhotos(adminId, venueId, categoryId) {
 
-    var allPhotos = this.state.photos;
+  //   var allPhotos = this.state.photos;
 
-    const photo1 = this.state.photos[0];
-    const photo2 = this.state.photos[1];
+  //   const photo1 = this.state.photos[0];
+  //   const photo2 = this.state.photos[1];
 
-    console.log(photo1);
-    console.log(photo2);
+  //   console.log(photo1);
+  //   console.log(photo2);
 
-    photo1.rank=2;
-    photo2.rank=1;
+  //   photo1.rank=2;
+  //   photo2.rank=1;
 
-    allPhotos[0] = photo2;
-    allPhotos[1] = photo1;
+  //   allPhotos[0] = photo2;
+  //   allPhotos[1] = photo1;
 
-    this.props.updatePhoto(adminId, venueId, categoryId, photo1);
-    this.props.updatePhoto(adminId, venueId, categoryId, photo2);
+  //   this.props.updatePhoto(adminId, venueId, categoryId, photo1);
+  //   this.props.updatePhoto(adminId, venueId, categoryId, photo2);
 
-    this.setState({ photos: allPhotos });
+  //   this.setState({ photos: allPhotos });
 
-  }
+  // }
 
   render () {
 
