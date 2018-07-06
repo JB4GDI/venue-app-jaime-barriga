@@ -1,14 +1,21 @@
 import React from 'react';
 
 class SinglePhotoContainer extends React.Component {
-  constructor() {
-    super();
+
+  constructor(props) {
+    super(props);
     this.state = {
+      caption: '',
       singlePhotoSelected: false, // Is the photo selected (clicked on) or not?
       showCaptionSaveButton: false,
       mouseIsHovering: false // Is the container being hovered over?
-    };
+    }
   }
+
+  componentDidMount() {
+    this.setState({ caption: this.props.photo.caption });
+  }
+
 
   showLeftRightMoveButtons() {
     this.setState({ mouseIsHovering: true });
@@ -22,13 +29,25 @@ class SinglePhotoContainer extends React.Component {
     this.setState({ showCaptionSaveButton: true });
   }
 
+  handleTextareaChange(e, photo) {
+    this.showCaptionSaveButton();
+
+    /* 
+      Holy crap, is this a nightmare.  There are all sorts of problems with the textarea.
+      The best solution I've found is to
+      1.  Literally take in the photo as a parameter and update the caption by force.
+      2.  Adjust the state.caption so that if we want to save, we can pull the value.
+    */
+    photo.caption = e.target.value;
+    this.setState({ caption: e.target.value });
+  }
+
   hideCaptionSaveButton() {
     this.setState({ showCaptionSaveButton: false });
   }
 
   moveButtonLeftClicked() {
-    console.log("LEFT");
-    console.log(this.props.photo);
+    this.props.movePhotoLeft(this.props.photo, this.props.photoList);
   }
 
   moveButtonRightClicked() {
@@ -36,6 +55,12 @@ class SinglePhotoContainer extends React.Component {
     console.log(this.props.photo);
   }
 
+  /*
+    This function is a little busy, but essentiall it renders the "move left/right" buttons on a photo.  
+    If it's the leftmost photo, there's no "move left."  And if it is the rightmost (highest rank) it has no "move right."
+
+    When you click them, it calls a function to move them one over.
+  */
   renderLeftRightMoveButtons() {    
     if (this.state.mouseIsHovering === true && this.props.photo.rank === 1) {
 
@@ -80,12 +105,11 @@ class SinglePhotoContainer extends React.Component {
     }
   }
 
-  onSubmit(e) {
+  onSubmit(e, photo) {
     e.preventDefault();
 
-    // We are saving, so take the value we entered and make that the new caption
-    this.props.photo.caption = this.content.value;
-    this.props.updatePhoto(this.props.adminId, this.props.venueId, this.props.categoryId, this.props.photo);
+    // An onChange has updated the photo caption, so it is there in the photo object
+    this.props.updatePhoto(this.props.adminId, this.props.venueId, this.props.categoryId, photo);
     
     this.hideCaptionSaveButton();
   }
@@ -132,28 +156,54 @@ class SinglePhotoContainer extends React.Component {
   }
 
   renderSinglePhotoCaption(photo) {
-    return (
-      <form
-        className="photo-caption-textbox"
-        onSubmit={(e) => this.onSubmit(e)}
-      >
-        <textarea 
-          className="photo_caption"
-          onChange={() => this.showCaptionSaveButton()}
-          ref={(input) => this.content = input}
-          defaultValue={photo.caption}
-        >          
-        </textarea>
-        {this.renderSaveButton()}
-      </form>
-      
-    );
+
+    console.log("Rendering: " + photo.rank + " " + photo.caption);
+
+    if (photo.caption === '') {
+      return (
+        <form
+          className="photo-caption-textbox"
+          onSubmit={(e) => this.onSubmit(e, photo)}
+        >
+          <textarea
+            id={photo.id}
+            className="photo_caption"
+            onChange={(e) => this.handleTextareaChange(e, photo)}
+            value={photo.caption}
+          >
+          </textarea>
+          {this.renderSaveButton()}
+        </form>
+       
+      );
+    } else {
+      return (
+        <form
+          className="photo-caption-textbox"
+          onSubmit={(e) => this.onSubmit(e, photo)}
+        >
+          <textarea
+            id={photo.id}
+            className="photo_caption"
+            onChange={(e) => this.handleTextareaChange(e, photo)}
+            value={photo.caption}
+          >
+          </textarea>
+          {this.renderSaveButton()}
+        </form>
+        
+      );
+    }
+
+
+
   }
 
   render () {
 
     const { 
       photo,
+      photoList,
       currentHighestPhotoRank,
 
       adminId,
@@ -162,7 +212,8 @@ class SinglePhotoContainer extends React.Component {
 
       increasePhotosSelected,
       decreasePhotosSelected,
-      updatePhoto
+      updatePhoto,
+      movePhotoLeft
 
      } = this.props;
 
