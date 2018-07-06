@@ -7,13 +7,14 @@ import venueApi from './helpers/venueApi';
 import Header from './components/Header';
 import UncategorizedPhotoContainer from './components/UncategorizedPhotoContainer';
 import CenterToolbar from './components/CenterToolbar';
-import ScrollablePhotoContainer from './components/ScrollablePhotoContainer';
+// import ScrollablePhotoContainer from './components/ScrollablePhotoContainer';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      totalPhotosSelected: 0
+      totalPhotosSelected: 0,
+      venueAdmins: []
     };
   }
 
@@ -23,7 +24,13 @@ class App extends Component {
 
   getAdmins = () => {
     axios.get(venueApi('venueadmins'))
-    .then((res) => console.log(res.data) )
+    .then((res) => this.setState({ venueAdmins: res.data }) )
+    .catch((err) => console.log(err.response.data) );
+  }
+
+  getAdmin = (id) => {
+    axios.get(venueApi(`venueadmins/${id}`))
+    .then((res) => this.setState({ venueAdmin: res.data }) )
     .catch((err) => console.log(err.response.data) );
   }
 
@@ -40,13 +47,16 @@ class App extends Component {
   }
 
   render() {
-    const { totalPhotosSelected } = this.state;
+    const { venueAdmins, totalPhotosSelected } = this.state;
 
 
     return (
       <div className="App">
-        <p onClick={ () => this.getAdmins() }>CLICK ME</p>
-        <Header getAdmins={this.getAdmins}/>
+        <Header
+          venueAdmins={venueAdmins}
+          getAdmins={this.getAdmins}
+          getAdmin={this.getAdmin}
+        />
         <UncategorizedPhotoContainer 
           totalPhotosSelected={this.totalPhotosSelected}
           increasePhotosSelected={this.increasePhotosSelected}
