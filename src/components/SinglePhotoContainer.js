@@ -5,8 +5,17 @@ class SinglePhotoContainer extends React.Component {
     super();
     this.state = {
       singlePhotoSelected: false, // Is the photo selected (clicked on) or not?
-      showCaptionSaveButton: false
+      showCaptionSaveButton: false,
+      mouseIsHovering: false // Is the container being hovered over?
     };
+  }
+
+  showLeftRightMoveButtons() {
+    this.setState({ mouseIsHovering: true });
+  }  
+
+  hideLeftRightMoveButtons() {
+    this.setState({ mouseIsHovering: false });
   }
 
   showCaptionSaveButton() {
@@ -15,6 +24,52 @@ class SinglePhotoContainer extends React.Component {
 
   hideCaptionSaveButton() {
     this.setState({ showCaptionSaveButton: false });
+  }
+
+  moveButtonLeftClicked() {
+    console.log("LEFT");
+    console.log(this.props.photo);
+  }
+
+  moveButtonRightClicked() {
+    console.log("RIGHT");
+    console.log(this.props.photo);
+  }
+
+  renderLeftRightMoveButtons() {    
+    if (this.state.mouseIsHovering === true && this.props.photo.rank === 1) {
+
+      return (
+        <div className="leftrightbuttoncontainer">
+          <i className="material-icons moveButtonOnlyRight" onClick={() => this.moveButtonRightClicked()}>chevron_right</i>
+        </div>        
+      );
+
+    } else if (this.state.mouseIsHovering === true && this.props.photo.rank === this.props.currentHighestPhotoRank) {
+
+      return (
+        <div className="leftrightbuttoncontainer">
+          <i className="material-icons moveButtonOnlyLeft" onClick={() => this.moveButtonLeftClicked()}>chevron_left</i>
+        </div>        
+      );
+
+    } else if (this.state.mouseIsHovering === true && this.props.photo.rank > 1 && this.props.photo.rank < this.props.currentHighestPhotoRank) {
+
+      return (
+        <div className="leftrightbuttoncontainer">
+          <i className="material-icons moveButtonLeft" onClick={() => this.moveButtonLeftClicked()}>chevron_left</i>
+          <i className="material-icons moveButtonRight" onClick={() => this.moveButtonRightClicked()}>chevron_right</i>
+        </div>
+        
+        );
+    } else {
+      return (
+        <div className="leftrightbuttoncontainer hidden">
+          <i className="material-icons moveButtonLeft" onClick={() => this.moveButtonLeftClicked()}>chevron_left</i>
+          <i className="material-icons moveButtonRight" onClick={() => this.moveButtonRightClicked()}>chevron_right</i>
+        </div>
+      );
+    }
   }
 
   renderSaveButton() {
@@ -28,8 +83,8 @@ class SinglePhotoContainer extends React.Component {
   onSubmit(e) {
     e.preventDefault();
 
-    this.props.photo.caption = this.content.value;  // We are saving, so take the value we entered and make that the new caption
-
+    // We are saving, so take the value we entered and make that the new caption
+    this.props.photo.caption = this.content.value;
     this.props.updatePhoto(this.props.adminId, this.props.venueId, this.props.categoryId, this.props.photo);
     
     this.hideCaptionSaveButton();
@@ -68,7 +123,11 @@ class SinglePhotoContainer extends React.Component {
 
   renderSinglePhotoImage(photo) {
     return (
-      <img className="photo_image" src={"http://jaimebarriga.com/venues/" + photo.filename} onClick={() => this.toggleSinglePhotoSelected()} />
+      <img 
+        className="photo_image" 
+        src={"http://jaimebarriga.com/venues/" + photo.filename} 
+        onClick={() => this.toggleSinglePhotoSelected()} 
+      />
     );
   }
 
@@ -95,6 +154,7 @@ class SinglePhotoContainer extends React.Component {
 
     const { 
       photo,
+      currentHighestPhotoRank,
 
       adminId,
       venueId,
@@ -107,9 +167,18 @@ class SinglePhotoContainer extends React.Component {
      } = this.props;
 
     return (
-      <div className={ this.renderBackgroundColor() }>
-
-        {this.renderSinglePhotoImage(photo)}
+      <div 
+        className={ this.renderBackgroundColor() }
+      >
+        <div
+          className="full_width"
+          onMouseEnter={() => this.showLeftRightMoveButtons()} 
+          onMouseLeave={() => this.hideLeftRightMoveButtons()}
+        >
+          <span>{this.renderLeftRightMoveButtons()}</span>
+          <span>{this.renderSinglePhotoImage(photo)}</span>
+        </div>
+        
         {this.renderSinglePhotoCaption(photo)}
 
       </div>

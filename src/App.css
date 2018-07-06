@@ -110,6 +110,38 @@ p, textarea {
 
 }
 
+.leftrightbuttoncontainer {
+  height: 0;
+  position: absolute;
+  width: 0;
+
+}
+
+.moveButtonLeft, .moveButtonRight, .moveButtonOnlyLeft, .moveButtonOnlyRight {  
+  background-color: #CDC2BE;
+  cursor: pointer;
+  position: relative;
+}
+
+.moveButtonLeft {    
+  top: 36px;
+}
+
+.moveButtonOnlyLeft {
+  top: 36px;
+}
+
+.moveButtonRight {  
+  left: 151px;
+  top: 8px;
+}
+
+.moveButtonOnlyRight {
+  left: 151px;
+  top: 36px;
+
+}
+
 .savebutton {
   left: 126px;  
   position: relative;

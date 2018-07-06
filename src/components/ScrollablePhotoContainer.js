@@ -39,6 +39,7 @@ class ScrollablePhotoContainer extends React.Component {
           key={photo.rank - 1}
           index={photo.rank - 1}
           photo={photo}
+          currentHighestPhotoRank = {photos[photos.length-1].rank}
 
           adminId={this.props.adminId}
           venueId={this.props.venueId}
