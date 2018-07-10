@@ -116,9 +116,9 @@ class SinglePhotoContainer extends React.Component {
   renderBackgroundColor() {
 
     var currentPhotoId = this.props.photo.id;
-    var selectedPhotosList = this.props.selectedPhotos;
+    var selectedPhotoIdsList = this.props.selectedPhotoIds;
 
-    if (selectedPhotosList.includes(currentPhotoId)) {
+    if (selectedPhotoIdsList.includes(currentPhotoId)) {
       return "single_photo_container fl background_color_gold";
     } else {
       return "single_photo_container fl";
@@ -130,7 +130,7 @@ class SinglePhotoContainer extends React.Component {
       <img 
         className="photo_image" 
         src={"http://jaimebarriga.com/venues/" + photo.filename} 
-        onClick={() => this.props.toggleSelectedPhoto(photo.id)} 
+        onClick={() => this.props.toggleSelectedPhoto(photo)} 
       />
     );
   }
@@ -190,7 +190,7 @@ class SinglePhotoContainer extends React.Component {
       updatePhoto,
       selectPhoto,
       toggleSelectedPhoto,
-      selectedPhotos,
+      selectedPhotoIds,
       deselectPhoto,
       movePhotoLeft,
       photoOnLeft,

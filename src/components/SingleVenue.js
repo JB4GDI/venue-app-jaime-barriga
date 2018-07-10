@@ -5,7 +5,8 @@ import CategoryContainer from './CategoryContainer'
   Parent: VenuesContainer
   Child: CategoryContainer
 
-  At this point, we have a single venue, and the next thing we want to do is display all the categories that belong to it.  Extract them here.
+  At this point, we have a single venue, and the next thing we want to do is display all
+  the categories that belong to it.  Extract them here.  There will normally be 4 categories.
 */
 class SingleVenue extends React.Component {
 

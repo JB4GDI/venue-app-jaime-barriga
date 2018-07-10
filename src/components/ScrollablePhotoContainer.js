@@ -7,7 +7,8 @@ class ScrollablePhotoContainer extends React.Component {
     super(props);
     this.state = {
       photos: [],
-      selectedPhotos: []
+      selectedPhotos: [],
+      selectedPhotoIds: []
     };
 
     // Binding this allows us to call this function from a lower level and still have access to where we're at now
@@ -36,36 +37,49 @@ class ScrollablePhotoContainer extends React.Component {
     return photos.sort(comparePhotoRank);
   }
 
-  /* The Photo is now selected, so simply add the photoId to the list of selectedPhotos in the state */
-  selectPhoto(photoId) {
+  /* The Photo is now selected, so simply add the photoId to the list of selectedPhotoIds in the state */
+  selectPhoto(currentPhoto) {
 
-    var newArray = this.state.selectedPhotos;
-    newArray.push(photoId);
+    var selectedPhotosArray = this.state.selectedPhotos;
+    selectedPhotosArray.push(currentPhoto);    
 
-    this.setState({ selectedPhotos: newArray })
+    var selectedPhotoIdsArray = this.state.selectedPhotoIds;
+    selectedPhotoIdsArray.push(currentPhoto.id);
+    
+
+    this.setState({ 
+      selectedPhotos: selectedPhotosArray,
+      selectedPhotoIds: selectedPhotoIdsArray
+    });
   }
 
-  /* The Photo is now DEselected, so simply remove the photoId to the list of selectedPhotos in the state */
-  deselectPhoto(photoId) {
+  /* The Photo is now DEselected, so simply remove the photoId to the list of selectedPhotoIds in the state */
+  deselectPhoto(currentPhoto) {
 
-    var newArray = this.state.selectedPhotos;
-    newArray.splice(newArray.indexOf(photoId), 1);
+    var selectedPhotosArray = this.state.selectedPhotos;
+    selectedPhotosArray.splice(selectedPhotosArray.indexOf(currentPhoto), 1);   
 
-    this.setState({ selectedPhotos: newArray })
+    var selectedPhotoIdsArray = this.state.selectedPhotoIds;
+    selectedPhotoIdsArray.splice(selectedPhotoIdsArray.indexOf(currentPhoto.id), 1);
+
+        this.setState({ 
+      selectedPhotos: selectedPhotosArray,
+      selectedPhotoIds: selectedPhotoIdsArray
+    });
   }
 
-  toggleSelectedPhoto(photoId) {
+  /* Deselects all photos by clearing out the state.selectedPhotoIds array */
+  deselectAllPhotos() {
+    this.setState({ selectedPhotoIds: [] });
+  }
 
-    // var selectedPhotos = this.state.selectedPhotos;
+  toggleSelectedPhoto(currentPhoto) {    
 
-    // console.log(selectedPhotos);
-
-    if (this.state.selectedPhotos.includes(photoId)) {
-      this.deselectPhoto(photoId);
+    if (this.state.selectedPhotoIds.includes(currentPhoto.id)) {
+      this.deselectPhoto(currentPhoto);
     } else {
-      this.selectPhoto(photoId);
+      this.selectPhoto(currentPhoto);
     }
-
   }
 
   /*
@@ -146,9 +160,9 @@ class ScrollablePhotoContainer extends React.Component {
           updatePhoto = {this.props.updatePhoto}
           selectPhoto = {this.selectPhoto}
           deselectPhoto = {this.deselectPhoto}
-          selectedPhotos = {this.state.selectedPhotos}
+          selectedPhotoIds = {this.state.selectedPhotoIds}
           toggleSelectedPhoto = {this.toggleSelectedPhoto}
-          
+
           movePhotoLeft = {this.movePhotoLeft}
           movePhotoRight = {this.movePhotoRight}
         />
@@ -165,8 +179,6 @@ class ScrollablePhotoContainer extends React.Component {
         <div className="scrollable_photo_list fancy_border_top fl">
           {allPhotos}
         </div>
-
-        <div onClick={() => this.swapPhotos(adminId, venueId, categoryId)}>Hello</div>
 
       </div>
     );
