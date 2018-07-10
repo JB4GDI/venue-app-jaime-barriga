@@ -79,7 +79,7 @@ p, textarea {
 
 .single_photo_container {
   margin-right: 5px;
-  width: 175px;
+  width: 176px;
   height: 160px;
 }
 
@@ -115,6 +115,23 @@ p, textarea {
   position: absolute;
   width: 0;
 
+}
+
+.deletebuttoncontainer {
+  height: 0;
+  position: absolute;
+  width: 0;  
+  cursor: pointer;
+}
+
+.deleteButton {
+  cursor: pointer;
+  position: relative;
+  background-color: #DDC5CC;
+}
+
+.deleteButton:hover { 
+    background-color: #a36275;;
 }
 
 .moveButtonLeft, .moveButtonRight, .moveButtonOnlyLeft, .moveButtonOnlyRight {  

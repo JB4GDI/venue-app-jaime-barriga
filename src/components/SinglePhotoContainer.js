@@ -53,45 +53,60 @@ class SinglePhotoContainer extends React.Component {
     this.props.movePhotoRight(this.props.adminId, this.props.venueId, this.props.categoryId, this.props.photo, this.props.photoList);
   }
 
+  renderDeleteButton() {
+    if (this.state.mouseIsHovering === true) {
+      return (
+        <div className="deletebuttoncontainer">
+          <i className="material-icons deleteButton">delete_forever</i>
+        </div>        
+      );
+    }
+    
+  }
+
   /*
     This function is a little busy, but essentiall it renders the "move left/right" buttons on a photo.  
     If it's the leftmost photo, there's no "move left."  And if it is the rightmost (highest rank) it has no "move right."
 
+    Also, the Unassigned category doesn't display anything
+
     When you click them, it calls a function to move them one over.
   */
   renderLeftRightMoveButtons() {    
-    if (this.state.mouseIsHovering === true && this.props.photo.rank === 1) {
+    if(this.props.categoryId > 1) {
+      if (this.state.mouseIsHovering === true && this.props.photo.rank === 1) {
 
-      return (
-        <div className="leftrightbuttoncontainer">
-          <i className="material-icons moveButtonOnlyRight" onClick={() => this.moveButtonRightClicked()}>chevron_right</i>
-        </div>        
-      );
-
-    } else if (this.state.mouseIsHovering === true && this.props.photo.rank === this.props.currentHighestPhotoRank) {
-
-      return (
-        <div className="leftrightbuttoncontainer">
-          <i className="material-icons moveButtonOnlyLeft" onClick={() => this.moveButtonLeftClicked()}>chevron_left</i>
-        </div>        
-      );
-
-    } else if (this.state.mouseIsHovering === true && this.props.photo.rank > 1 && this.props.photo.rank < this.props.currentHighestPhotoRank) {
-
-      return (
-        <div className="leftrightbuttoncontainer">
-          <i className="material-icons moveButtonLeft" onClick={() => this.moveButtonLeftClicked()}>chevron_left</i>
-          <i className="material-icons moveButtonRight" onClick={() => this.moveButtonRightClicked()}>chevron_right</i>
-        </div>
-        
+        return (
+          <div className="leftrightbuttoncontainer">
+            <i className="material-icons moveButtonOnlyRight" onClick={() => this.moveButtonRightClicked()}>chevron_right</i>
+          </div>        
         );
-    } else {
-      return (
-        <div className="leftrightbuttoncontainer hidden">
-          <i className="material-icons moveButtonLeft" onClick={() => this.moveButtonLeftClicked()}>chevron_left</i>
-          <i className="material-icons moveButtonRight" onClick={() => this.moveButtonRightClicked()}>chevron_right</i>
-        </div>
-      );
+
+      } else if (this.state.mouseIsHovering === true && this.props.photo.rank === this.props.currentHighestPhotoRank) {
+
+        return (
+          <div className="leftrightbuttoncontainer">
+            <i className="material-icons moveButtonOnlyLeft" onClick={() => this.moveButtonLeftClicked()}>chevron_left</i>
+          </div>        
+        );
+
+      } else if (this.state.mouseIsHovering === true && this.props.photo.rank > 1 && this.props.photo.rank < this.props.currentHighestPhotoRank) {
+
+        return (
+          <div className="leftrightbuttoncontainer">
+            <i className="material-icons moveButtonLeft" onClick={() => this.moveButtonLeftClicked()}>chevron_left</i>
+            <i className="material-icons moveButtonRight" onClick={() => this.moveButtonRightClicked()}>chevron_right</i>
+          </div>
+          
+          );
+      } else {
+        return (
+          <div className="leftrightbuttoncontainer hidden">
+            <i className="material-icons moveButtonLeft" onClick={() => this.moveButtonLeftClicked()}>chevron_left</i>
+            <i className="material-icons moveButtonRight" onClick={() => this.moveButtonRightClicked()}>chevron_right</i>
+          </div>
+        );
+      }
     }
   }
 
@@ -211,6 +226,7 @@ class SinglePhotoContainer extends React.Component {
           onMouseEnter={() => this.showLeftRightMoveButtons()} 
           onMouseLeave={() => this.hideLeftRightMoveButtons()}
         >
+          <span>{this.renderDeleteButton()}</span>
           <span>{this.renderLeftRightMoveButtons()}</span>
           <span>{this.renderSinglePhotoImage(photo)}</span>
         </div>
