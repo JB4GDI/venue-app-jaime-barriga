@@ -53,6 +53,17 @@ class SingleVenue extends React.Component {
     });
   }
 
+  deselectPhotosGlobal = () => {
+    // console.log("DESELECT ALL FIRED!");
+
+    // console.log(this.refs);
+    
+    // Access the "deselectAllPhotos" function in the CategoryContainer children (using childCategoryReference)
+    for (let key in this.refs) {
+      this.refs[key].deselectAllPhotos();
+    }
+  }
+
   render () {
 
     const { 
@@ -66,6 +77,9 @@ class SingleVenue extends React.Component {
     const categories = venue.categorys.map((categories, index) => {
       return (
         <CategoryContainer
+
+          ref={"childCategoryReference" + index}
+
           key={index}
           index={index}
           category={categories}
@@ -82,6 +96,7 @@ class SingleVenue extends React.Component {
 
     return (
       <div>
+        <p onClick={() => this.deselectPhotosGlobal() }>DESELECT ALL</p>
         {categories}
       </div>
     );

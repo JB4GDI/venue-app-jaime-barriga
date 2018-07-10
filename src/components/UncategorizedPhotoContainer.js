@@ -8,28 +8,6 @@ import CenterToolbar from './CenterToolbar';
 */
 class UncategorizedPhotoContainer extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      photos: []
-    };
-  }
-
-
-  /* The rank of the photos is super important.  We use this function to sort the photos by rank */
-  sortPhotos(photos) {
-
-    function comparePhotoRank(a,b) {
-      if (a.rank < b.rank)
-        return -1;
-      if (a.rank > b.rank)
-        return 1;
-      return 0;
-    };
-
-    return photos.sort(comparePhotoRank);
-  }
-
   render () {
 
     const { 
@@ -51,7 +29,7 @@ class UncategorizedPhotoContainer extends React.Component {
 
      } = this.props;
 
-    const allPhotos = this.sortPhotos(photos).map((photo, index) => {
+    const allPhotos = photos.map((photo, index) => {
       return (
         <SinglePhotoContainer
           key={photo.rank - 1}
