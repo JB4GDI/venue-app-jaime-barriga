@@ -22,8 +22,6 @@ class SingleVenue extends React.Component {
     };
 
     // Binding this allows us to call this function from a lower level and still have access to where we're at now
-    this.increasePhotosSelected = this.increasePhotosSelected.bind(this);
-    this.decreasePhotosSelected = this.decreasePhotosSelected.bind(this);
     this.handleSinglePhotoSelect = this.handleSinglePhotoSelect.bind(this);
 
   }
@@ -35,26 +33,6 @@ class SingleVenue extends React.Component {
     } else {
       //Do nothing.
     }
-  }
-
-  increasePhotosSelected = (categoryId) => {
-
-    // console.log(categoryId);
-
-    this.setState({
-      totalPhotosSelected: this.state.totalPhotosSelected + 1,
-      latestSelectedPhotoCategory: categoryId
-    });
-  }
-
-  decreasePhotosSelected = (categoryId) => {
-
-    // console.log(categoryId);
-
-    this.setState({
-      totalPhotosSelected: this.state.totalPhotosSelected - 1,
-      latestSelectedPhotoCategory: categoryId
-    });
   }
 
   handleSinglePhotoSelect = (currentPhotoClicked, categoryId) => {
@@ -76,7 +54,8 @@ class SingleVenue extends React.Component {
 
       this.setState({ 
         listOfSelectedPhotos: updatedSelectedPhotoList,
-        selectedPhotoIds: updatedSelectedPhotoId
+        selectedPhotoIds: updatedSelectedPhotoId,
+        totalPhotosSelected: 1
       });
 
       // console.log(updatedSelectedPhotoList);
@@ -122,7 +101,8 @@ class SingleVenue extends React.Component {
 
         this.setState({ 
           listOfSelectedPhotos: updatedSelectedPhotoList,
-          selectedPhotoIds: updatedSelectedPhotoIds
+          selectedPhotoIds: updatedSelectedPhotoIds,
+          totalPhotosSelected: this.state.totalPhotosSelected - 1
         });
 
       } else {
@@ -148,7 +128,8 @@ class SingleVenue extends React.Component {
 
         this.setState({ 
           listOfSelectedPhotos: updatedSelectedPhotoList,
-          selectedPhotoIds: updatedSelectedPhotoIds
+          selectedPhotoIds: updatedSelectedPhotoIds,
+          totalPhotosSelected: this.state.totalPhotosSelected + 1
         });
       }      
 
@@ -230,8 +211,6 @@ class SingleVenue extends React.Component {
           latestSelectedPhotoCategory={this.state.latestSelectedPhotoCategory}
           selectedPhotoIds={this.state.selectedPhotoIds}
           handleSinglePhotoSelect={this.handleSinglePhotoSelect}
-          increasePhotosSelected={this.increasePhotosSelected}
-          decreasePhotosSelected={this.decreasePhotosSelected}
           updatePhoto = {this.props.updatePhoto}
         />
       );
@@ -239,7 +218,6 @@ class SingleVenue extends React.Component {
 
     return (
       <div>
-        <p onClick={() => this.deselectPhotosGlobal() }>DESELECT ALL</p>
         {categories}
       </div>
     );

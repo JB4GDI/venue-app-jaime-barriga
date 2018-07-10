@@ -19,8 +19,6 @@ class UncategorizedPhotoContainer extends React.Component {
 
       latestSelectedPhotoCategory,
       handleSinglePhotoSelect,
-      increasePhotosSelected,
-      decreasePhotosSelected,
 
       updatePhoto,
 
@@ -46,8 +44,6 @@ class UncategorizedPhotoContainer extends React.Component {
           latestSelectedPhotoCategory={this.props.latestSelectedPhotoCategory}
           selectedPhotoIds={this.props.selectedPhotoIds}
           handleSinglePhotoSelect={this.props.handleSinglePhotoSelect}
-          increasePhotosSelected={this.props.increasePhotosSelected}
-          decreasePhotosSelected={this.props.decreasePhotosSelected}
 
           updatePhoto = {this.props.updatePhoto}
 

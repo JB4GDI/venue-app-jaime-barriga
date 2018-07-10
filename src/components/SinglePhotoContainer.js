@@ -187,8 +187,6 @@ class SinglePhotoContainer extends React.Component {
 
       latestSelectedPhotoCategory,
       handleSinglePhotoSelect,
-      increasePhotosSelected,
-      decreasePhotosSelected,
 
       updatePhoto,
 
