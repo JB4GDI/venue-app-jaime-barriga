@@ -51,8 +51,7 @@ class SinglePhotoContainer extends React.Component {
   }
 
   moveButtonRightClicked() {
-    console.log("RIGHT");
-    console.log(this.props.photo);
+    this.props.movePhotoRight(this.props.adminId, this.props.venueId, this.props.categoryId, this.props.photo, this.props.photoList);
   }
 
   /*
@@ -125,10 +124,10 @@ class SinglePhotoContainer extends React.Component {
 
     if (this.state.singlePhotoSelected === false) {      
       this.setState({ singlePhotoSelected: true });
-      this.props.increasePhotosSelected();
+      this.props.increasePhotosSelected(this.props.categoryId);
     } else {
       this.setState({ singlePhotoSelected: false });
-      this.props.decreasePhotosSelected();
+      this.props.decreasePhotosSelected(this.props.categoryId);
     }
   }
 
@@ -138,7 +137,11 @@ class SinglePhotoContainer extends React.Component {
 
   /* If selected, turn the background color to gold */
   renderBackgroundColor() {
-    if (this.state.singlePhotoSelected === true) {
+
+    var currentPhotoId = this.props.photo.id;
+    var selectedPhotosList = this.props.selectedPhotos;
+
+    if (selectedPhotosList.includes(currentPhotoId)) {
       return "single_photo_container fl background_color_gold";
     } else {
       return "single_photo_container fl";
@@ -208,9 +211,14 @@ class SinglePhotoContainer extends React.Component {
       increasePhotosSelected,
       decreasePhotosSelected,
       updatePhoto,
+      selectPhoto,
+      toggleSelectedPhoto,
+      selectedPhotos,
+      deselectPhoto,
       movePhotoLeft,
       photoOnLeft,
-      photoOnRight
+      photoOnRight,
+      movePhotoRight
 
      } = this.props;
 
@@ -218,6 +226,7 @@ class SinglePhotoContainer extends React.Component {
       <div 
         className={ this.renderBackgroundColor() }
       >
+        <p onClick={ () => this.props.toggleSelectedPhoto(this.props.photo.id) } >TOGGLESELECT </p>
         <div
           className="full_width"
           onMouseEnter={() => this.showLeftRightMoveButtons()} 

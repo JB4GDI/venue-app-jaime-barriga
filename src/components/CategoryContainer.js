@@ -8,8 +8,9 @@ import ScrollablePhotoContainer from './ScrollablePhotoContainer';
     UncategorizedPhotoContainer
     ScrollablePhotoContainer
 
-  Here we have a single category.  A single category contains photos, but if the category is 'unassigned', it's part of the left nav, and
-  behaves differently from all the rest.
+  Here we have a single category.  A single category contains photos, but if the category is 
+  'unassigned' (UncategorizedPhotoContainer), it's part of the left nav, and behaves differently
+  from all the rest.  All other categories become a ScrollablePhotoContainer.
 */
 class CategoryContainer extends React.Component {
 

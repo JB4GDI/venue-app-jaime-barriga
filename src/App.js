@@ -10,11 +10,8 @@ import AdminsContainer from './components/AdminsContainer';
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      totalPhotosSelected: 0,
-      venueAdmins: [],
-      latestSelectedPhotoLocation: '',
-      listOfSelectedPhotos: []
+    this.state = {      
+      venueAdmins: []
     };
   }
 
@@ -34,58 +31,11 @@ class App extends Component {
     .catch((err) => console.log(err.response.data) );
   }
 
-  photoSelected = (photoLocation) => {
-    /* If the states are different */
-    if (this.state.latestSelectedPhotoLocation !== photoLocation) {
-
-    } else {
-      //Do nothing.
-    }
-  }
-
-  increasePhotosSelected = () => {
-    this.setState({
-      totalPhotosSelected: this.state.totalPhotosSelected + 1
-    });
-  }
-
-  decreasePhotosSelected = () => {
-    this.setState({
-      totalPhotosSelected: this.state.totalPhotosSelected - 1
-    });
-  }
-
-  // getVenues = () => {
-
-  // }
-
-  // getVenueById = (id) => {
-
-  // }
-
-  // getCategories = () => {
-
-  // }
-
-  // getCategoryById = (id) => {
-
-  // }
-
-  // getPhotos = () => {
-
-  // }
-
-  // getPhotoById = (id) => {
-
-  // }
-
   updatePhoto = (adminId, venueId, categoryId, photo) => {
     axios.patch(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photo.id}`), photo)
     .then((res) => console.log("PhotoUpdated!"))
     .catch((err) => console.log(err.response.data))
   }
-
-
 
 
   /* 
@@ -109,9 +59,6 @@ class App extends Component {
         />
         <AdminsContainer 
           venueAdmins={venueAdmins}
-
-          increasePhotosSelected={this.increasePhotosSelected}
-          decreasePhotosSelected={this.decreasePhotosSelected}
 
           updatePhoto={this.updatePhoto}
         />

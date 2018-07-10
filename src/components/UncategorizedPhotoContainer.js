@@ -8,6 +8,20 @@ import CenterToolbar from './CenterToolbar';
 */
 class UncategorizedPhotoContainer extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      photos: [],
+      selectedPhotos: []
+    };
+
+    // Binding this allows us to call this function from a lower level and still have access to where we're at now
+    this.selectPhoto = this.selectPhoto.bind(this);
+    this.deselectPhoto = this.deselectPhoto.bind(this);
+    this.toggleSelectedPhoto = this.toggleSelectedPhoto.bind(this);
+  }
+
+
   /* The rank of the photos is super important.  We use this function to sort the photos by rank */
   sortPhotos(photos) {
 
@@ -20,6 +34,44 @@ class UncategorizedPhotoContainer extends React.Component {
     };
 
     return photos.sort(comparePhotoRank);
+  }
+
+  deselectAllPhotos(photos) {
+    for (var i = 0; i < photos.length; i++) {
+      photos[i].toggleSinglePhotoSelected();
+    }
+  }
+
+    /* The Photo is now selected, so simply add the photoId to the list of selectedPhotos in the state */
+  selectPhoto(photoId) {
+
+    var newArray = this.state.selectedPhotos;
+    newArray.push(photoId);
+
+    this.setState({ selectedPhotos: newArray })
+  }
+
+  /* The Photo is now DEselected, so simply remove the photoId to the list of selectedPhotos in the state */
+  deselectPhoto(photoId) {
+
+    var newArray = this.state.selectedPhotos;
+    newArray.splice(newArray.indexOf(photoId), 1);
+
+    this.setState({ selectedPhotos: newArray })
+  }
+
+  toggleSelectedPhoto(photoId) {
+
+    // var selectedPhotos = this.state.selectedPhotos;
+
+    // console.log(selectedPhotos);
+
+    if (this.state.selectedPhotos.includes(photoId)) {
+      this.deselectPhoto(photoId);
+    } else {
+      this.selectPhoto(photoId);
+    }
+
   }
 
 
@@ -55,7 +107,11 @@ class UncategorizedPhotoContainer extends React.Component {
 
           increasePhotosSelected={this.props.increasePhotosSelected}
           decreasePhotosSelected={this.props.decreasePhotosSelected}
+
           updatePhoto = {this.props.updatePhoto}
+          selectPhoto = {this.selectPhoto}
+          deselectPhoto = {this.deselectPhoto}
+          selectedPhotos = {this.state.selectedPhotos}
         />
       );
     });
@@ -66,6 +122,7 @@ class UncategorizedPhotoContainer extends React.Component {
 
           <div className="unassigned_headline fancy_border_bottom fl">
             <h2 className="full_width">Photos that need a category</h2>
+            <p onClick={() => this.deselectAllPhotos(this.props.photos)}>CLICK ME</p>
           </div>
           
           <div className="photo_list fancy_border_top full_width fl">

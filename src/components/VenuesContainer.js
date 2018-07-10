@@ -14,8 +14,6 @@ class VenuesContainer extends React.Component {
     const { 
       venueAdmin,
       adminId,
-      increasePhotosSelected,
-      decreasePhotosSelected,
       updatePhoto
     } = this.props;
 
@@ -29,8 +27,6 @@ class VenuesContainer extends React.Component {
           adminId={this.props.adminId}
           venueId={venues.id}
 
-          increasePhotosSelected={this.props.increasePhotosSelected}
-          decreasePhotosSelected={this.props.decreasePhotosSelected}
           updatePhoto = {this.props.updatePhoto}
         />
       );

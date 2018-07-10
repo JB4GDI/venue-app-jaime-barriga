@@ -8,14 +8,56 @@ import CategoryContainer from './CategoryContainer'
   At this point, we have a single venue, and the next thing we want to do is display all the categories that belong to it.  Extract them here.
 */
 class SingleVenue extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      totalPhotosSelected: 0,
+      latestSelectedPhotoLocation: 0,
+      listOfSelectedPhotos: []
+    };
+
+    // Binding this allows us to call this function from a lower level and still have access to where we're at now
+    this.increasePhotosSelected = this.increasePhotosSelected.bind(this);
+    this.decreasePhotosSelected = this.decreasePhotosSelected.bind(this);
+
+  }
+
+  photoSelected = (photoLocation) => {
+    /* If the states are different */
+    if (this.state.latestSelectedPhotoLocation !== photoLocation) {
+
+    } else {
+      //Do nothing.
+    }
+  }
+
+  increasePhotosSelected = (categoryId) => {
+
+    console.log(categoryId);
+
+    this.setState({
+      totalPhotosSelected: this.state.totalPhotosSelected + 1,
+      latestSelectedPhotoLocation: categoryId
+    });
+  }
+
+  decreasePhotosSelected = (categoryId) => {
+
+    console.log(categoryId);
+
+    this.setState({
+      totalPhotosSelected: this.state.totalPhotosSelected - 1,
+      latestSelectedPhotoLocation: categoryId
+    });
+  }
+
   render () {
 
     const { 
       venue,
       adminId,
       venueId,
-      increasePhotosSelected,
-      decreasePhotosSelected,
       updatePhoto
     } = this.props;
 
@@ -30,8 +72,8 @@ class SingleVenue extends React.Component {
           adminId={this.props.adminId}
           venueId={this.props.venueId}
 
-          increasePhotosSelected={this.props.increasePhotosSelected}
-          decreasePhotosSelected={this.props.decreasePhotosSelected}
+          increasePhotosSelected={this.increasePhotosSelected}
+          decreasePhotosSelected={this.decreasePhotosSelected}
           updatePhoto = {this.props.updatePhoto}
         />
       );

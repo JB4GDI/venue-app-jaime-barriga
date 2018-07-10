@@ -12,7 +12,7 @@ import VenuesContainer from './VenuesContainer'
 class AdminsContainer extends React.Component {
   render () {
 
-    const { venueAdmins, increasePhotosSelected, decreasePhotosSelected, updatePhoto } = this.props;
+    const { venueAdmins, updatePhoto } = this.props;
 
     const admins = venueAdmins.map((venueAdmin, index) => {
       return (
@@ -22,8 +22,6 @@ class AdminsContainer extends React.Component {
           venueAdmin={venueAdmin}
           adminId={venueAdmin.id}
 
-          increasePhotosSelected={this.props.increasePhotosSelected}
-          decreasePhotosSelected={this.props.decreasePhotosSelected}
           updatePhoto = {this.props.updatePhoto}
         />
       );
