@@ -13,6 +13,8 @@ class ScrollablePhotoContainer extends React.Component {
       venueId,
       categoryId,
 
+      latestSelectedPhotoCategory,
+      handleSinglePhotoSelect,
       increasePhotosSelected,
       decreasePhotosSelected,
 
@@ -43,13 +45,15 @@ class ScrollablePhotoContainer extends React.Component {
           venueId={this.props.venueId}
           categoryId={this.props.categoryId}
 
+          latestSelectedPhotoCategory={this.props.latestSelectedPhotoCategory}
+          selectedPhotoIds={this.props.selectedPhotoIds}
+          handleSinglePhotoSelect={this.props.handleSinglePhotoSelect}
           increasePhotosSelected={this.props.increasePhotosSelected}
           decreasePhotosSelected={this.props.decreasePhotosSelected}
 
           updatePhoto = {this.props.updatePhoto}
           selectPhoto = {this.props.selectPhoto}
           deselectPhoto = {this.props.deselectPhoto}
-          selectedPhotoIds = {this.props.selectedPhotoIds}
           toggleSelectedPhoto = {this.props.toggleSelectedPhoto}
 
           movePhotoLeft = {this.props.movePhotoLeft}

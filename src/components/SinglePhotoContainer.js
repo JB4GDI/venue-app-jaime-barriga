@@ -118,7 +118,7 @@ class SinglePhotoContainer extends React.Component {
     var currentPhotoId = this.props.photo.id;
     var selectedPhotoIdsList = this.props.selectedPhotoIds;
 
-    if (selectedPhotoIdsList.includes(currentPhotoId)) {
+    if (selectedPhotoIdsList.includes(currentPhotoId) && this.props.latestSelectedPhotoCategory === this.props.categoryId) {
       return "single_photo_container fl background_color_gold";
     } else {
       return "single_photo_container fl";
@@ -130,7 +130,7 @@ class SinglePhotoContainer extends React.Component {
       <img 
         className="photo_image" 
         src={"http://jaimebarriga.com/venues/" + photo.filename} 
-        onClick={() => this.props.toggleSelectedPhoto(photo)} 
+        onClick={() => this.props.handleSinglePhotoSelect(photo, this.props.categoryId)} 
       />
     );
   }
@@ -185,6 +185,8 @@ class SinglePhotoContainer extends React.Component {
       venueId,
       categoryId,
 
+      latestSelectedPhotoCategory,
+      handleSinglePhotoSelect,
       increasePhotosSelected,
       decreasePhotosSelected,
 
@@ -195,7 +197,7 @@ class SinglePhotoContainer extends React.Component {
       selectedPhotoIds,
       deselectPhoto,
       movePhotoLeft,
-      
+
       photoOnLeft,
       photoOnRight,
       movePhotoRight

@@ -17,6 +17,8 @@ class UncategorizedPhotoContainer extends React.Component {
       venueId,
       categoryId,
 
+      latestSelectedPhotoCategory,
+      handleSinglePhotoSelect,
       increasePhotosSelected,
       decreasePhotosSelected,
 
@@ -41,6 +43,9 @@ class UncategorizedPhotoContainer extends React.Component {
           venueId={this.props.venueId}
           categoryId={this.props.categoryId}
 
+          latestSelectedPhotoCategory={this.props.latestSelectedPhotoCategory}
+          selectedPhotoIds={this.props.selectedPhotoIds}
+          handleSinglePhotoSelect={this.props.handleSinglePhotoSelect}
           increasePhotosSelected={this.props.increasePhotosSelected}
           decreasePhotosSelected={this.props.decreasePhotosSelected}
 
@@ -48,7 +53,6 @@ class UncategorizedPhotoContainer extends React.Component {
 
           selectPhoto = {this.props.selectPhoto}
           deselectPhoto = {this.props.deselectPhoto}
-          selectedPhotoIds = {this.props.selectedPhotoIds}
           toggleSelectedPhoto = {this.props.toggleSelectedPhoto}
         />
       );

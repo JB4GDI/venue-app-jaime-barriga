@@ -20,15 +20,14 @@ class CategoryContainer extends React.Component {
     super(props);
     this.state = {
       photos: [],
-      selectedPhotos: [],
-      selectedPhotoIds: []
+      selectedPhotos: []
     };
 
     // Binding this allows us to call this function from a lower level and still have access to where we're at now    
-    this.selectPhoto = this.selectPhoto.bind(this);
-    this.deselectPhoto = this.deselectPhoto.bind(this);
-    this.deselectAllPhotos = this.deselectAllPhotos.bind(this);
-    this.toggleSelectedPhoto = this.toggleSelectedPhoto.bind(this);
+    // this.selectPhoto = this.selectPhoto.bind(this);
+    // this.deselectPhoto = this.deselectPhoto.bind(this);
+    // this.deselectAllPhotos = this.deselectAllPhotos.bind(this);
+    // this.toggleSelectedPhoto = this.toggleSelectedPhoto.bind(this);
 
     this.movePhotoLeft = this.movePhotoLeft.bind(this);
     this.movePhotoRight = this.movePhotoRight.bind(this);
@@ -53,61 +52,49 @@ class CategoryContainer extends React.Component {
   }
 
 
-  deselectAllPhotos(photos) {
-    for (var i = 0; i < photos.length; i++) {
-      console.log("Photo Deselected: " + photos[i].id);
-    }
-  }
+  // deselectAllPhotos(photos) {
+  //   for (var i = 0; i < photos.length; i++) {
+  //     // console.log("Photo Deselected: " + photos[i].id);
+  //   }
+  // }
 
-  /* The Photo is now selected, so simply add the photoId to the list of selectedPhotoIds in the state */
-  selectPhoto(currentPhoto) {
+  // selectPhoto(currentPhoto) {
 
-    var selectedPhotosArray = this.state.selectedPhotos;
-    selectedPhotosArray.push(currentPhoto);    
-
-    var selectedPhotoIdsArray = this.state.selectedPhotoIds;
-    selectedPhotoIdsArray.push(currentPhoto.id);
+  //   var selectedPhotosArray = this.state.selectedPhotos;
+  //   selectedPhotosArray.push(currentPhoto);    
     
 
-    this.setState({ 
-      selectedPhotos: selectedPhotosArray,
-      selectedPhotoIds: selectedPhotoIdsArray
-    });
-  }
+  //   this.setState({ 
+  //     selectedPhotos: selectedPhotosArray
+  //   });
+  // }
 
-  /* The Photo is now DEselected, so simply remove the photoId to the list of selectedPhotoIds in the state */
-  deselectPhoto(currentPhoto) {
+  // deselectPhoto(currentPhoto) {
 
-    var selectedPhotosArray = this.state.selectedPhotos;
-    selectedPhotosArray.splice(selectedPhotosArray.indexOf(currentPhoto), 1);   
+  //   var selectedPhotosArray = this.state.selectedPhotos;
+  //   selectedPhotosArray.splice(selectedPhotosArray.indexOf(currentPhoto), 1);   
 
-    var selectedPhotoIdsArray = this.state.selectedPhotoIds;
-    selectedPhotoIdsArray.splice(selectedPhotoIdsArray.indexOf(currentPhoto.id), 1);
+  //   this.setState({ 
+  //     selectedPhotos: selectedPhotosArray
+  //   });
+  // }
 
-    this.setState({ 
-      selectedPhotos: selectedPhotosArray,
-      selectedPhotoIds: selectedPhotoIdsArray
-    });
-  }
-
-  /* Deselects all photos by clearing out the state.selectedPhotoIds array */
   deselectAllPhotos() {
 
-    console.log("Deselecting category: " + this.props.category.id);
+    // console.log("Deselecting category: " + this.props.category.id);
 
     this.setState({
-      selectedPhotos: [],
-      selectedPhotoIds: [] 
+      selectedPhotos: [] 
     });
   }
 
-  toggleSelectedPhoto(currentPhoto) {    
-    if (this.state.selectedPhotoIds.includes(currentPhoto.id)) {
-      this.deselectPhoto(currentPhoto);
-    } else {
-      this.selectPhoto(currentPhoto);
-    }
-  }
+  // toggleSelectedPhoto(currentPhoto) {    
+  //   if (this.state.selectedPhotoIds.includes(currentPhoto.id)) {
+  //     this.deselectPhoto(currentPhoto);
+  //   } else {
+  //     this.selectPhoto(currentPhoto);
+  //   }
+  // }
 
   /*
     Given a photo, find the photo to its left, and have them swap places.
@@ -159,14 +146,16 @@ class CategoryContainer extends React.Component {
           venueId={this.props.venueId}
           categoryId={category.id}
 
+          latestSelectedPhotoCategory={this.props.latestSelectedPhotoCategory}
+          selectedPhotoIds={this.props.selectedPhotoIds}
+          handleSinglePhotoSelect={this.props.handleSinglePhotoSelect}
           increasePhotosSelected={this.props.increasePhotosSelected}
           decreasePhotosSelected={this.props.decreasePhotosSelected}
 
           updatePhoto = {this.props.updatePhoto}
 
-          selectPhoto = {this.selectPhoto}
+          // selectPhoto = {this.selectPhoto}
           deselectPhoto = {this.deselectPhoto}
-          selectedPhotoIds = {this.state.selectedPhotoIds}
           toggleSelectedPhoto = {this.toggleSelectedPhoto}
         />
       );
@@ -182,6 +171,9 @@ class CategoryContainer extends React.Component {
           venueId={this.props.venueId}
           categoryId={category.id}
 
+          latestSelectedPhotoCategory={this.props.latestSelectedPhotoCategory}
+          selectedPhotoIds={this.props.selectedPhotoIds}
+          handleSinglePhotoSelect={this.props.handleSinglePhotoSelect}
           increasePhotosSelected={this.props.increasePhotosSelected}
           decreasePhotosSelected={this.props.decreasePhotosSelected}
 
@@ -189,7 +181,6 @@ class CategoryContainer extends React.Component {
 
           selectPhoto = {this.selectPhoto}
           deselectPhoto = {this.deselectPhoto}
-          selectedPhotoIds = {this.state.selectedPhotoIds}
           toggleSelectedPhoto = {this.toggleSelectedPhoto}
 
           movePhotoLeft = {this.movePhotoLeft}
@@ -205,8 +196,13 @@ class CategoryContainer extends React.Component {
       category,
       adminId,
       venueId,
+
+      latestSelectedPhotoCategory,
+      selectedPhotoIds,
+      handleSinglePhotoSelect,
       increasePhotosSelected,
       decreasePhotosSelected,
+
       updatePhoto
     } = this.props;
 
