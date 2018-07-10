@@ -112,6 +112,7 @@ class UncategorizedPhotoContainer extends React.Component {
           selectPhoto = {this.selectPhoto}
           deselectPhoto = {this.deselectPhoto}
           selectedPhotos = {this.state.selectedPhotos}
+          toggleSelectedPhoto = {this.toggleSelectedPhoto}
         />
       );
     });

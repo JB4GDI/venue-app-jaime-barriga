@@ -6,7 +6,6 @@ class SinglePhotoContainer extends React.Component {
     super(props);
     this.state = {
       caption: '',
-      singlePhotoSelected: false, // Is the photo selected (clicked on) or not?
       showCaptionSaveButton: false,
       mouseIsHovering: false // Is the container being hovered over?
     }
@@ -113,28 +112,6 @@ class SinglePhotoContainer extends React.Component {
     this.hideCaptionSaveButton();
   }
 
-  /* 
-    This function does 2 things: 
-
-    1.  It toggles the 'selected' state of each photo
-    2.  It properly updates the grandparent's state to the correct number of photos selected
-
-  */
-  toggleSinglePhotoSelected() {
-
-    if (this.state.singlePhotoSelected === false) {      
-      this.setState({ singlePhotoSelected: true });
-      this.props.increasePhotosSelected(this.props.categoryId);
-    } else {
-      this.setState({ singlePhotoSelected: false });
-      this.props.decreasePhotosSelected(this.props.categoryId);
-    }
-  }
-
-  forcePhotoDeselect() {
-    this.setState({ singlePhotoSelected: false });
-  }
-
   /* If selected, turn the background color to gold */
   renderBackgroundColor() {
 
@@ -153,7 +130,7 @@ class SinglePhotoContainer extends React.Component {
       <img 
         className="photo_image" 
         src={"http://jaimebarriga.com/venues/" + photo.filename} 
-        onClick={() => this.toggleSinglePhotoSelected()} 
+        onClick={() => this.props.toggleSelectedPhoto(photo.id)} 
       />
     );
   }
@@ -226,7 +203,6 @@ class SinglePhotoContainer extends React.Component {
       <div 
         className={ this.renderBackgroundColor() }
       >
-        <p onClick={ () => this.props.toggleSelectedPhoto(this.props.photo.id) } >TOGGLESELECT </p>
         <div
           className="full_width"
           onMouseEnter={() => this.showLeftRightMoveButtons()} 
