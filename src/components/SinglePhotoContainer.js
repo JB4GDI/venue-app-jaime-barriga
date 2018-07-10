@@ -187,12 +187,15 @@ class SinglePhotoContainer extends React.Component {
 
       increasePhotosSelected,
       decreasePhotosSelected,
+
       updatePhoto,
+
       selectPhoto,
       toggleSelectedPhoto,
       selectedPhotoIds,
       deselectPhoto,
       movePhotoLeft,
+      
       photoOnLeft,
       photoOnRight,
       movePhotoRight

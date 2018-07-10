@@ -24,7 +24,7 @@ class SingleVenue extends React.Component {
 
   }
 
-  photoSelected = (photoLocation) => {
+  selectme = (photoLocation) => {
     /* If the states are different */
     if (this.state.latestSelectedPhotoLocation !== photoLocation) {
 

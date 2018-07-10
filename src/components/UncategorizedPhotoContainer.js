@@ -11,15 +11,8 @@ class UncategorizedPhotoContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      photos: [],
-      selectedPhotos: [],
-      selectedPhotoIds: []
+      photos: []
     };
-
-    // Binding this allows us to call this function from a lower level and still have access to where we're at now
-    this.selectPhoto = this.selectPhoto.bind(this);
-    this.deselectPhoto = this.deselectPhoto.bind(this);
-    this.toggleSelectedPhoto = this.toggleSelectedPhoto.bind(this);
   }
 
 
@@ -37,61 +30,6 @@ class UncategorizedPhotoContainer extends React.Component {
     return photos.sort(comparePhotoRank);
   }
 
-  deselectAllPhotos(photos) {
-    for (var i = 0; i < photos.length; i++) {
-      photos[i].toggleSinglePhotoSelected();
-    }
-  }
-
-  /* The Photo is now selected, so simply add the photoId to the list of selectedPhotoIds in the state */
-  selectPhoto(currentPhoto) {
-
-    var selectedPhotosArray = this.state.selectedPhotos;
-    selectedPhotosArray.push(currentPhoto);    
-
-    var selectedPhotoIdsArray = this.state.selectedPhotoIds;
-    selectedPhotoIdsArray.push(currentPhoto.id);
-    
-
-    this.setState({ 
-      selectedPhotos: selectedPhotosArray,
-      selectedPhotoIds: selectedPhotoIdsArray
-    });
-  }
-
-  /* The Photo is now DEselected, so simply remove the photoId to the list of selectedPhotoIds in the state */
-  deselectPhoto(currentPhoto) {
-
-    var selectedPhotosArray = this.state.selectedPhotos;
-    selectedPhotosArray.splice(selectedPhotosArray.indexOf(currentPhoto), 1);   
-
-    var selectedPhotoIdsArray = this.state.selectedPhotoIds;
-    selectedPhotoIdsArray.splice(selectedPhotoIdsArray.indexOf(currentPhoto.id), 1);
-
-    this.setState({ 
-      selectedPhotos: selectedPhotosArray,
-      selectedPhotoIds: selectedPhotoIdsArray
-    });
-  }
-
-  /* Deselects all photos by clearing out the state.selectedPhotoIds array */
-  deselectAllPhotos() {
-    this.setState({
-      selectedPhotos: [],
-      selectedPhotoIds: [] 
-    });
-  }
-
-  toggleSelectedPhoto(currentPhoto) {    
-
-    if (this.state.selectedPhotoIds.includes(currentPhoto.id)) {
-      this.deselectPhoto(currentPhoto);
-    } else {
-      this.selectPhoto(currentPhoto);
-    }
-  }
-
-
   render () {
 
     const { 
@@ -103,7 +41,13 @@ class UncategorizedPhotoContainer extends React.Component {
 
       increasePhotosSelected,
       decreasePhotosSelected,
-      updatePhoto
+
+      updatePhoto,
+
+      selectPhoto,
+      toggleSelectedPhoto,
+      selectedPhotoIds,
+      deselectPhoto
 
      } = this.props;
 
@@ -123,10 +67,11 @@ class UncategorizedPhotoContainer extends React.Component {
           decreasePhotosSelected={this.props.decreasePhotosSelected}
 
           updatePhoto = {this.props.updatePhoto}
-          selectPhoto = {this.selectPhoto}
-          deselectPhoto = {this.deselectPhoto}
-          selectedPhotoIds = {this.state.selectedPhotoIds}
-          toggleSelectedPhoto = {this.toggleSelectedPhoto}
+
+          selectPhoto = {this.props.selectPhoto}
+          deselectPhoto = {this.props.deselectPhoto}
+          selectedPhotoIds = {this.props.selectedPhotoIds}
+          toggleSelectedPhoto = {this.props.toggleSelectedPhoto}
         />
       );
     });
