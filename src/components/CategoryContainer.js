@@ -124,7 +124,7 @@ class CategoryContainer extends React.Component {
     this.props.updatePhoto(adminId, venueId, categoryId, originalRightPhoto);
 
     // Update the application state with the new information
-    this.setState({ photos: photoList });
+    this.setState({ photos: this.sortPhotos(photoList) });
   }
 
   /* Really, the only thing we're doing here is swapping the rank of a photo with the one on its right */
@@ -142,7 +142,7 @@ class CategoryContainer extends React.Component {
     this.props.updatePhoto(adminId, venueId, categoryId, originalRightPhoto);
 
     // Update the application state with the new information
-    this.setState({ photos: photoList });
+    this.setState({ photos: this.sortPhotos(photoList) });
   }
 
   /* There is a big difference between the Unassigned Category and all the rest.  Render them differently here. */
