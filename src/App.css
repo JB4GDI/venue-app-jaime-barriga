@@ -188,6 +188,25 @@ p, textarea {
   top: -84px;
 }
 
+.toolbar {
+  right: 0;
+  
+  background-color: #fff;
+  height: 400px;
+  position: fixed;
+  width: 200px;
+
+}
+
+.slide_to_left {
+  animation-name: slide_left;
+  animation-duration: 1s;
+}
+.slide_to_right {
+  animation-name: slide_right;
+  animation-duration: 1s;
+}
+
 /* HELPER FUNCTIONS */
 
 .background_color_gold { background-color: #bea052; }
@@ -215,3 +234,33 @@ p, textarea {
   from { opacity: 1; }
   to {   opacity: 0; }
 }
+
+@keyframes slide_left {
+  from {
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+    visibility: visible;
+  }
+
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+
+@keyframes slide_right {
+  from {
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+    visibility: visible;
+  }
+
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+
+  

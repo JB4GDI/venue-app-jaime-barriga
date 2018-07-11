@@ -228,6 +228,12 @@ class SingleVenue extends React.Component {
     return (
       <div>
         {categories}
+          <div 
+            className={ this.state.totalPhotosSelected > 0 ? "toolbar slide_to_left" : "toolbar hidden" }
+          >
+            <h2 className="fancy_border_bottom">Move to:</h2>
+          </div>
+
       </div>
     );
   }
