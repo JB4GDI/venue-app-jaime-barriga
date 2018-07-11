@@ -1,10 +1,9 @@
 import React from 'react';
 import SinglePhotoContainer from './SinglePhotoContainer';
-import CenterToolbar from './CenterToolbar';
 
 /*
   An Uncategorized Photo Container contains all the photos that haven't been organized yet,
-  as well as a Center Toolbar (which we may or may not even need).
+  as well as a Center Gap, to push all the other venues to the right.
 */
 class UncategorizedPhotoContainer extends React.Component {
 
@@ -68,7 +67,8 @@ class UncategorizedPhotoContainer extends React.Component {
 
         </div>
 
-        <CenterToolbar />
+        <div className="center_gap fl">
+        </div>
       </div>
 
     );
