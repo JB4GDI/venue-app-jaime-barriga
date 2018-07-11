@@ -12,7 +12,12 @@ import VenuesContainer from './VenuesContainer'
 class AdminsContainer extends React.Component {
   render () {
 
-    const { venueAdmins, updatePhoto } = this.props;
+    const { 
+      venueAdmins,
+      getAdmins,
+      updatePhoto,
+      deletePhoto 
+    } = this.props;
 
     const admins = venueAdmins.map((venueAdmin, index) => {
       return (
@@ -20,9 +25,12 @@ class AdminsContainer extends React.Component {
           key={index}
           index={index}
           venueAdmin={venueAdmin}
+          getAdmins={this.props.getAdmins}
           adminId={venueAdmin.id}
 
           updatePhoto = {this.props.updatePhoto}
+          deletePhoto = {this.props.deletePhoto}
+
         />
       );
     });

@@ -9,7 +9,7 @@ class Username extends React.Component {
     const { venueAdmin } = this.props
 
     return (
-      <p className="username fr">Hello {venueAdmin.name}!</p>
+      <p className="username header_text fr">Hello {venueAdmin.name}!</p>
     );
   }
 }

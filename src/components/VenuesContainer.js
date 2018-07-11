@@ -13,8 +13,11 @@ class VenuesContainer extends React.Component {
 
     const { 
       venueAdmin,
+      getAdmins,
       adminId,
-      updatePhoto
+
+      updatePhoto,
+      deletePhoto
     } = this.props;
 
     const venues = venueAdmin.venues.map((venues, index) => {
@@ -24,17 +27,20 @@ class VenuesContainer extends React.Component {
           index={index}
           venue={venues}
 
+          getAdmins={this.props.getAdmins}
+
           adminId={this.props.adminId}
           venueId={venues.id}
 
           updatePhoto = {this.props.updatePhoto}
+          deletePhoto = {this.props.deletePhoto}
         />
       );
     });
 
 
     return (
-      <div>
+      <div className="venue_container full_width fl">
         {venues[0]}
       </div>
     );

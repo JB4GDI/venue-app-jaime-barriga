@@ -3,11 +3,6 @@ import Username from './Username'
 
 class Header extends React.Component {
 
-  /* Before we are finished loading the header, we will use the header to populate the admins in App.state */
-  componentWillMount() {
-    this.props.getAdmins();
-  }
-
   render() {
 
     const { venueAdmins } = this.props;
@@ -24,7 +19,7 @@ class Header extends React.Component {
 
     return (
       <div className="header fl">
-        <h1 className="fl fancy_border_bottom">Arrange Photos</h1>
+        <p className="header_text fl">Arrange Photos</p>
         {admin[0]}
       </div>
     );

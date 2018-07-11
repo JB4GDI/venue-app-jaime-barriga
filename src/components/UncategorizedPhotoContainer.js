@@ -20,6 +20,7 @@ class UncategorizedPhotoContainer extends React.Component {
       handleSinglePhotoSelect,
 
       updatePhoto,
+      handlePhotoDelete,
 
       selectPhoto,
       toggleSelectedPhoto,
@@ -45,6 +46,7 @@ class UncategorizedPhotoContainer extends React.Component {
           handleSinglePhotoSelect={this.props.handleSinglePhotoSelect}
 
           updatePhoto = {this.props.updatePhoto}
+          handlePhotoDelete = {this.props.handlePhotoDelete}
 
           selectPhoto = {this.props.selectPhoto}
           deselectPhoto = {this.props.deselectPhoto}

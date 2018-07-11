@@ -15,8 +15,9 @@ class App extends Component {
     };
   }
 
-  test = () => {
-    console.log("test");
+  /* Before we are finished loading the application, we will populate everything into App.state */
+  componentWillMount() {
+    this.getAdmins();
   }
 
   getAdmins = () => {
@@ -32,9 +33,25 @@ class App extends Component {
   }
 
   updatePhoto = (adminId, venueId, categoryId, photo) => {
+
+    // console.log("Updating photo: ");
+    // console.log(photo);
+
     axios.patch(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photo.id}`), photo)
-    .then((res) => console.log("PhotoUpdated!"))
+    .then((res) => console.log("Photo successfully updated!"))
     .catch((err) => console.log(err.response.data))
+  }
+
+  /* Because we are altering the state, we need to reload the whole state when done. */
+  deletePhoto = (adminId, venueId, categoryId, photo) => {
+
+    // console.log("Deleting photo: ");
+    // console.log(photo);
+
+
+    axios.delete(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photo.id}`), photo)
+    .then((res) => console.log("Photo successfully deleted!") )
+    .catch((err) => console.log(err.response.data) );
   }
 
 
@@ -59,8 +76,10 @@ class App extends Component {
         />
         <AdminsContainer 
           venueAdmins={venueAdmins}
+          getAdmins={this.getAdmins}
 
           updatePhoto={this.updatePhoto}
+          deletePhoto={this.deletePhoto}
         />
       </div>
     );

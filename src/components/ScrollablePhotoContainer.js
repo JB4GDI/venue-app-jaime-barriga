@@ -17,6 +17,7 @@ class ScrollablePhotoContainer extends React.Component {
       handleSinglePhotoSelect,
 
       updatePhoto,
+      handlePhotoDelete,
 
       selectPhoto,
       toggleSelectedPhoto,
@@ -48,6 +49,8 @@ class ScrollablePhotoContainer extends React.Component {
           handleSinglePhotoSelect={this.props.handleSinglePhotoSelect}
 
           updatePhoto = {this.props.updatePhoto}
+          handlePhotoDelete = {this.props.handlePhotoDelete}
+
           selectPhoto = {this.props.selectPhoto}
           deselectPhoto = {this.props.deselectPhoto}
           toggleSelectedPhoto = {this.props.toggleSelectedPhoto}

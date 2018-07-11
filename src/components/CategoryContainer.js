@@ -33,12 +33,16 @@ class CategoryContainer extends React.Component {
     this.movePhotoRight = this.movePhotoRight.bind(this);
   }
 
+  componentWillMount() {
+    this.setState({ photos: this.sortPhotos(this.props.category.photos) });
+  }
+
   componentDidMount() {
     this.setState({ photos: this.sortPhotos(this.props.category.photos) });
   }
 
   /* The rank of the photos is super important.  We use this function to sort the photos by rank */
-  sortPhotos(photos) {
+  sortPhotos = (photos) => {
 
     function comparePhotoRank(a,b) {
       if (a.rank < b.rank)
@@ -79,7 +83,7 @@ class CategoryContainer extends React.Component {
   //   });
   // }
 
-  deselectAllPhotos() {
+  deselectAllPhotos = () => {
 
     // console.log("Deselecting category: " + this.props.category.id);
 
@@ -99,7 +103,7 @@ class CategoryContainer extends React.Component {
   /*
     Given a photo, find the photo to its left, and have them swap places.
   */
-  movePhotoLeft(adminId, venueId, categoryId, photo, photoList) {
+  movePhotoLeft = (adminId, venueId, categoryId, photo, photoList) => {
 
     var originalRightPhoto = photo;
     var originalLeftPhoto = photoList[photo.rank - 2];
@@ -115,7 +119,7 @@ class CategoryContainer extends React.Component {
   }
 
   /* Really, the only thing we're doing here is swapping the rank of a photo with the one on its right */
-  movePhotoRight(adminId, venueId, categoryId, photo, photoList) {
+  movePhotoRight = (adminId, venueId, categoryId, photo, photoList) => {
 
     var originalLeftPhoto = photo;     
     var originalRightPhoto = photoList[photo.rank];
@@ -130,6 +134,74 @@ class CategoryContainer extends React.Component {
 
     // Update the application state with the new information
     this.setState({ photos: this.sortPhotos(photoList) });
+  }
+
+  /*
+    Given a photo (and all the other params needed to update) this will lower the 
+    rank on the photo by 1 and update it.
+  */
+  lowerRankAndUpdate = (adminId, venueId, categoryId, photo) => {
+
+    // console.log("CURRENT ELEMENT RANK: " + photo.rank);
+
+    // var originalPhotoList = this.state.photos;
+    // console.log(originalPhotoList);
+    // var photoIndex = originalPhotoList.indexOf(photo);
+    // console.log(photoIndex);
+
+    photo.rank = photo.rank -1;
+
+    // originalPhotoList[photoIndex] = photo;
+
+    // this.setState({ photos: originalPhotoList });
+
+    this.props.updatePhoto(adminId, venueId, categoryId, photo);
+  }
+
+
+  /* 
+    Delete photo is tricky.  We need to 
+      1.  If the photo is selected, remove it from the selected list
+      2.  Loop through all the photos, starting with the highest rank
+          A.  If the photo is above the deleted one in rank, lower rank by 1
+          B.  If the photo is the one to delete, delete it.
+
+    We have to set this up so it fires in order.
+  */
+
+  handlePhotoDelete = (adminId, venueId, categoryId, photo) => {
+
+    var originalPhotoList = this.state.photos;
+    var originalSelectedPhotoList = this.state.selectedPhotos;
+
+    // 1.  Handle removing this photo from the  "select" list
+    if (originalSelectedPhotoList.includes(photo)) {
+      this.setState({ selectedPhotos: originalSelectedPhotoList.splice(originalSelectedPhotoList.indexOf(photo), 1)});
+    }
+
+    var deletedPhotoRank = photo.rank;
+
+    console.log("Deleting the photo with rank " + deletedPhotoRank);
+
+    /* 
+      Again, it's very important that we find the photo to delete FIRST, then update the rest
+      in order.
+    */
+    originalPhotoList.reverse().forEach(async (element) => {
+
+      console.log("Okay: " + element.rank + ":" + element.filename);
+
+      if (element.rank === deletedPhotoRank) {
+        await(this.props.deletePhoto(adminId, venueId, categoryId, element));
+        await(originalPhotoList.splice(originalPhotoList.indexOf(element), 1));
+      } else if (element.rank > deletedPhotoRank) {
+        await(this.lowerRankAndUpdate(adminId, venueId, categoryId, element));
+      }
+
+      // Forcibly update the state
+      this.componentDidMount();
+      
+    });
   }
 
   /* There is a big difference between the Unassigned Category and all the rest.  Render them differently here. */
@@ -151,8 +223,8 @@ class CategoryContainer extends React.Component {
           handleSinglePhotoSelect={this.props.handleSinglePhotoSelect}
 
           updatePhoto = {this.props.updatePhoto}
+          handlePhotoDelete = {this.handlePhotoDelete}
 
-          // selectPhoto = {this.selectPhoto}
           deselectPhoto = {this.deselectPhoto}
           toggleSelectedPhoto = {this.toggleSelectedPhoto}
         />
@@ -174,6 +246,7 @@ class CategoryContainer extends React.Component {
           handleSinglePhotoSelect={this.props.handleSinglePhotoSelect}
 
           updatePhoto = {this.props.updatePhoto}
+          handlePhotoDelete = {this.handlePhotoDelete}
 
           selectPhoto = {this.selectPhoto}
           deselectPhoto = {this.deselectPhoto}
@@ -193,11 +266,15 @@ class CategoryContainer extends React.Component {
       adminId,
       venueId,
 
+      getAdmins,
+
       latestSelectedPhotoCategory,
       selectedPhotoIds,
       handleSinglePhotoSelect,
 
-      updatePhoto
+      updatePhoto,
+      deletePhoto
+
     } = this.props;
 
     return (

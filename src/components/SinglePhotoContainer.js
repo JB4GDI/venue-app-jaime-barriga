@@ -15,7 +15,6 @@ class SinglePhotoContainer extends React.Component {
     this.setState({ caption: this.props.photo.caption });
   }
 
-
   showLeftRightMoveButtons() {
     this.setState({ mouseIsHovering: true });
   }  
@@ -46,24 +45,28 @@ class SinglePhotoContainer extends React.Component {
   }
 
   moveButtonLeftClicked() {
-    this.setState({ showCaptionSaveButton: false });
+    this.hideCaptionSaveButton();
     this.props.movePhotoLeft(this.props.adminId, this.props.venueId, this.props.categoryId, this.props.photo, this.props.photoList);
   }
 
   moveButtonRightClicked() {
-    this.setState({ showCaptionSaveButton: false });
+    this.hideCaptionSaveButton();
     this.props.movePhotoRight(this.props.adminId, this.props.venueId, this.props.categoryId, this.props.photo, this.props.photoList);
+  }
+
+  deleteButtonClicked() {
+    this.hideCaptionSaveButton();
+    this.props.handlePhotoDelete(this.props.adminId, this.props.venueId, this.props.categoryId, this.props.photo, this.props.photoList);
   }
 
   renderDeleteButton() {
     if (this.state.mouseIsHovering === true) {
       return (
-        <div className="deletebuttoncontainer">
+        <div className="deletebuttoncontainer" onClick={ () => this.deleteButtonClicked() }>
           <i className="material-icons deleteButton">delete_forever</i>
         </div>        
       );
-    }
-    
+    }    
   }
 
   /*
@@ -206,6 +209,7 @@ class SinglePhotoContainer extends React.Component {
       handleSinglePhotoSelect,
 
       updatePhoto,
+      handlePhotoDelete,
 
       selectPhoto,
       toggleSelectedPhoto,

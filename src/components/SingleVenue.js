@@ -189,9 +189,14 @@ class SingleVenue extends React.Component {
 
     const { 
       venue,
+
+      getAdmins,
+
       adminId,
       venueId,
-      updatePhoto
+
+      updatePhoto,
+      deletePhoto
     } = this.props;
 
     /* Yes, "Categorys" isn't spelled right, but I did it in the API to follow Ruby/Rails conventions */
@@ -205,6 +210,8 @@ class SingleVenue extends React.Component {
           index={index}
           category={categories}
 
+          getAdmins={this.props.getAdmins}
+
           adminId={this.props.adminId}
           venueId={this.props.venueId}
 
@@ -212,6 +219,8 @@ class SingleVenue extends React.Component {
           selectedPhotoIds={this.state.selectedPhotoIds}
           handleSinglePhotoSelect={this.handleSinglePhotoSelect}
           updatePhoto = {this.props.updatePhoto}
+          deletePhoto = {this.props.deletePhoto}
+          
         />
       );
     });
