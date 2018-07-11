@@ -16,6 +16,7 @@ class VenuesContainer extends React.Component {
       getAdmins,
       adminId,
 
+      submitPhoto,
       updatePhoto,
       deletePhoto
     } = this.props;
@@ -32,8 +33,9 @@ class VenuesContainer extends React.Component {
           adminId={this.props.adminId}
           venueId={venues.id}
 
-          updatePhoto = {this.props.updatePhoto}
-          deletePhoto = {this.props.deletePhoto}
+          submitPhoto={this.props.submitPhoto}
+          updatePhoto={this.props.updatePhoto}
+          deletePhoto={this.props.deletePhoto}
         />
       );
     });

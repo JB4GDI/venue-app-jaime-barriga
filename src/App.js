@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
 
+import allPhotos from './helpers/allPhotos';
 import venueApi from './helpers/venueApi';
 
 import Header from './components/Header';
@@ -32,10 +33,20 @@ class App extends Component {
     .catch((err) => console.log(err.response.data) );
   }
 
+  submitPhoto = (adminId, venueId, categoryId, photo) => {
+
+    console.log("Submitting photo: ");
+    console.log(photo);
+
+    axios.post(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/`), photo)
+    .then((res) => console.log("Photo successfully submitted!"))
+    .catch((err) => console.log(err.response.data))
+  }
+
   updatePhoto = (adminId, venueId, categoryId, photo) => {
 
-    // console.log("Updating photo: ");
-    // console.log(photo);
+    console.log("Updating photo: ");
+    console.log(photo);
 
     axios.patch(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photo.id}`), photo)
     .then((res) => console.log("Photo successfully updated!"))
@@ -45,14 +56,24 @@ class App extends Component {
   /* Because we are altering the state, we need to reload the whole state when done. */
   deletePhoto = (adminId, venueId, categoryId, photo) => {
 
-    // console.log("Deleting photo: ");
-    // console.log(photo);
+    console.log("Deleting photo: ");
+    console.log(photo);
 
 
     axios.delete(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photo.id}`), photo)
     .then((res) => console.log("Photo successfully deleted!") )
     .catch((err) => console.log(err.response.data) );
   }
+
+  /* For testing.  Takes all the photos I have online and puts them into the API */
+  // generateAllPhotos = () => {
+
+  //   var thePhotos = allPhotos();
+
+  //   thePhotos.forEach( (photo) => {
+  //     this.submitPhoto(1, 1, 1, photo);
+  //   });
+  // }
 
 
   /* 
@@ -74,10 +95,12 @@ class App extends Component {
           getAdmins={this.getAdmins}
           getAdminById={this.getAdminById}
         />
+        <p onClick={ () => this.generateAllPhotos() }>Recreate Photos</p>
         <AdminsContainer 
           venueAdmins={venueAdmins}
           getAdmins={this.getAdmins}
 
+          submitPhoto={this.submitPhoto}
           updatePhoto={this.updatePhoto}
           deletePhoto={this.deletePhoto}
         />

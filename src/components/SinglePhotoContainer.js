@@ -79,7 +79,7 @@ class SinglePhotoContainer extends React.Component {
   */
   renderLeftRightMoveButtons() {    
     if(this.props.categoryId > 1) {
-      if (this.state.mouseIsHovering === true && this.props.photo.rank === 1) {
+      if (this.state.mouseIsHovering === true && this.props.photo.rank === 1 && this.props.photoList.length > 1) {
 
         return (
           <div className="leftrightbuttoncontainer">
@@ -87,7 +87,7 @@ class SinglePhotoContainer extends React.Component {
           </div>        
         );
 
-      } else if (this.state.mouseIsHovering === true && this.props.photo.rank === this.props.currentHighestPhotoRank) {
+      } else if (this.state.mouseIsHovering === true && this.props.photo.rank === this.props.currentHighestPhotoRank && this.props.photoList.length > 1) {
 
         return (
           <div className="leftrightbuttoncontainer">
@@ -228,7 +228,7 @@ class SinglePhotoContainer extends React.Component {
         className={ this.renderBackgroundColor() }
       >
         <div
-          className="full_width"
+          className="full_width relative"
           onMouseEnter={() => this.showLeftRightMoveButtons()} 
           onMouseLeave={() => this.hideLeftRightMoveButtons()}
         >

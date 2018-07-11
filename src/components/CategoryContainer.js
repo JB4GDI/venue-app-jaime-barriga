@@ -19,8 +19,7 @@ class CategoryContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      photos: [],
-      selectedPhotos: []
+      photos: []
     };
 
     // Binding this allows us to call this function from a lower level and still have access to where we're at now    
@@ -41,7 +40,23 @@ class CategoryContainer extends React.Component {
     this.setState({ photos: this.sortPhotos(this.props.category.photos) });
   }
 
+  
+
   /* The rank of the photos is super important.  We use this function to sort the photos by rank */
+  // sortPhotos = (photos) => {
+
+  //   function comparePhotoRank(a,b) {
+  //     if (a.rank < b.rank)
+  //       return -1;
+  //     if (a.rank > b.rank)
+  //       return 1;
+  //     return 0;
+  //   };
+
+  //   return photos.sort(comparePhotoRank);
+  // }
+
+  /* This is a hack, but maybe it's a hack that's genius */
   sortPhotos = (photos) => {
 
     function comparePhotoRank(a,b) {
@@ -52,64 +67,50 @@ class CategoryContainer extends React.Component {
       return 0;
     };
 
-    return photos.sort(comparePhotoRank);
-  }
+    photos.sort(comparePhotoRank);
 
+    for (let i = 0; i < photos.length; i ++) {
+      photos[i].rank = i + 1 ;
+    }
 
-  // deselectAllPhotos(photos) {
-  //   for (var i = 0; i < photos.length; i++) {
-  //     // console.log("Photo Deselected: " + photos[i].id);
-  //   }
-  // }
-
-  // selectPhoto(currentPhoto) {
-
-  //   var selectedPhotosArray = this.state.selectedPhotos;
-  //   selectedPhotosArray.push(currentPhoto);    
+    return photos;
     
-
-  //   this.setState({ 
-  //     selectedPhotos: selectedPhotosArray
-  //   });
-  // }
-
-  // deselectPhoto(currentPhoto) {
-
-  //   var selectedPhotosArray = this.state.selectedPhotos;
-  //   selectedPhotosArray.splice(selectedPhotosArray.indexOf(currentPhoto), 1);   
-
-  //   this.setState({ 
-  //     selectedPhotos: selectedPhotosArray
-  //   });
-  // }
-
-  deselectAllPhotos = () => {
-
-    // console.log("Deselecting category: " + this.props.category.id);
-
-    this.setState({
-      selectedPhotos: [] 
-    });
   }
 
-  // toggleSelectedPhoto(currentPhoto) {    
-  //   if (this.state.selectedPhotoIds.includes(currentPhoto.id)) {
-  //     this.deselectPhoto(currentPhoto);
-  //   } else {
-  //     this.selectPhoto(currentPhoto);
-  //   }
-  // }
-
-  /*
-    Given a photo, find the photo to its left, and have them swap places.
+  /* 
+    Take a photo and have it swap places with the photo on its left.
+    This function needs to also update the state.listOfSelectedPhotos
+      TODO:  This should reall be handled with a function call to state
   */
   movePhotoLeft = (adminId, venueId, categoryId, photo, photoList) => {
 
     var originalRightPhoto = photo;
     var originalLeftPhoto = photoList[photo.rank - 2];
 
-    originalRightPhoto.rank = originalRightPhoto.rank - 1;
-    originalLeftPhoto.rank = originalLeftPhoto.rank + 1;
+    var newRightPhotoRank = originalRightPhoto.rank - 1;
+    var newLeftPhotoRank = originalLeftPhoto.rank + 1;
+
+    if (this.props.listOfSelectedPhotos.includes(originalRightPhoto)) {
+      var photoLoc = this.props.listOfSelectedPhotos.indexOf(originalRightPhoto);
+      // console.log("Photo on the right looks like:");
+      // console.log(this.props.listOfSelectedPhotos[photoLoc]);
+      // console.log("currently rank " + this.props.listOfSelectedPhotos[photoLoc].rank + " should be " + newRightPhotoRank)
+
+      this.props.listOfSelectedPhotos[photoLoc].rank = newRightPhotoRank;
+
+    } 
+
+    if (this.props.listOfSelectedPhotos.includes(originalLeftPhoto)) {
+      var photoLoc = this.props.listOfSelectedPhotos.indexOf(originalLeftPhoto);
+      // console.log("Photo on the left looks like:");
+      // console.log(this.props.listOfSelectedPhotos[photoLoc]);
+      // console.log("currently rank " + this.props.listOfSelectedPhotos[photoLoc].rank + " should be " + newLeftPhotoRank)
+
+      this.props.listOfSelectedPhotos[photoLoc].rank = newLeftPhotoRank;
+    }
+
+    originalRightPhoto.rank = newRightPhotoRank;
+    originalLeftPhoto.rank = newLeftPhotoRank;
 
     this.props.updatePhoto(adminId, venueId, categoryId, originalLeftPhoto);
     this.props.updatePhoto(adminId, venueId, categoryId, originalRightPhoto);
@@ -118,14 +119,41 @@ class CategoryContainer extends React.Component {
     this.setState({ photos: this.sortPhotos(photoList) });
   }
 
-  /* Really, the only thing we're doing here is swapping the rank of a photo with the one on its right */
+  /* 
+    Take a photo and have it swap places with the photo on its right.
+    This function needs to also update the state.listOfSelectedPhotos
+      TODO:  This should reall be handled with a function call to state
+  */
   movePhotoRight = (adminId, venueId, categoryId, photo, photoList) => {
 
     var originalLeftPhoto = photo;     
     var originalRightPhoto = photoList[photo.rank];
 
-    originalRightPhoto.rank = originalRightPhoto.rank - 1;  
-    originalLeftPhoto.rank = originalLeftPhoto.rank + 1;
+    var newRightPhotoRank = originalRightPhoto.rank - 1;
+    var newLeftPhotoRank = originalLeftPhoto.rank + 1;
+
+    /* If either of these photos were selected */
+    if (this.props.listOfSelectedPhotos.includes(originalRightPhoto)) {
+      var photoLoc = this.props.listOfSelectedPhotos.indexOf(originalRightPhoto);
+      // console.log("Photo on the right looks like:");
+      // console.log(this.props.listOfSelectedPhotos[photoLoc]);
+      // console.log("currently rank " + this.props.listOfSelectedPhotos[photoLoc].rank + " should be " + newRightPhotoRank)
+
+      this.props.listOfSelectedPhotos[photoLoc].rank = newRightPhotoRank;
+
+    } 
+
+    if (this.props.listOfSelectedPhotos.includes(originalLeftPhoto)) {
+      var photoLoc = this.props.listOfSelectedPhotos.indexOf(originalLeftPhoto);
+      // console.log("Photo on the left looks like:");
+      // console.log(this.props.listOfSelectedPhotos[photoLoc]);
+      // console.log("currently rank " + this.props.listOfSelectedPhotos[photoLoc].rank + " should be " + newLeftPhotoRank)
+
+      this.props.listOfSelectedPhotos[photoLoc].rank = newLeftPhotoRank;
+    }
+
+    originalRightPhoto.rank = newRightPhotoRank;  
+    originalLeftPhoto.rank = newLeftPhotoRank;
 
     // Update the API with the new information
 
@@ -168,15 +196,18 @@ class CategoryContainer extends React.Component {
 
     We have to set this up so it fires in order.
   */
+  handlePhotoDelete = async (adminId, venueId, categoryId, photo) => {
 
-  handlePhotoDelete = (adminId, venueId, categoryId, photo) => {
+    console.log("BEGIN PHOTO DELETE");
+    console.log(photo);
+    console.log(this.props.listOfSelectedPhotos);
 
     var originalPhotoList = this.state.photos;
-    var originalSelectedPhotoList = this.state.selectedPhotos;
+    // var originalSelectedPhotoList = this.state.selectedPhotos;
 
-    // 1.  Handle removing this photo from the  "select" list
-    if (originalSelectedPhotoList.includes(photo)) {
-      this.setState({ selectedPhotos: originalSelectedPhotoList.splice(originalSelectedPhotoList.indexOf(photo), 1)});
+    //1.  TODO: Handle removing this photo from the  "select" list
+    if (this.props.listOfSelectedPhotos.includes(photo)) {
+      await(this.props.removePhotoFromSelectedList(photo));
     }
 
     var deletedPhotoRank = photo.rank;
@@ -187,9 +218,9 @@ class CategoryContainer extends React.Component {
       Again, it's very important that we find the photo to delete FIRST, then update the rest
       in order.
     */
-    originalPhotoList.reverse().forEach(async (element) => {
+    await(originalPhotoList.reverse().forEach(async (element) => {
 
-      console.log("Okay: " + element.rank + ":" + element.filename);
+      console.log("Looking at photo: " + element.rank + ":" + element.filename);
 
       if (element.rank === deletedPhotoRank) {
         await(this.props.deletePhoto(adminId, venueId, categoryId, element));
@@ -197,11 +228,16 @@ class CategoryContainer extends React.Component {
       } else if (element.rank > deletedPhotoRank) {
         await(this.lowerRankAndUpdate(adminId, venueId, categoryId, element));
       }
-
-      // Forcibly update the state
-      this.componentDidMount();
       
-    });
+    }));
+
+    console.log(this.props.category.photos);
+    console.log("done");
+
+    // Forcibly update the state
+    await(this.componentDidMount());
+
+
   }
 
   /* There is a big difference between the Unassigned Category and all the rest.  Render them differently here. */
@@ -243,7 +279,9 @@ class CategoryContainer extends React.Component {
 
           latestSelectedPhotoCategory={this.props.latestSelectedPhotoCategory}
           selectedPhotoIds={this.props.selectedPhotoIds}
+          changeSelectedPhotoRank={this.props.changeSelectedPhotoRank}
           handleSinglePhotoSelect={this.props.handleSinglePhotoSelect}
+          removePhotoFromSelectedList={this.props.removePhotoFromSelectedList}
 
           updatePhoto = {this.props.updatePhoto}
           handlePhotoDelete = {this.handlePhotoDelete}
@@ -270,7 +308,10 @@ class CategoryContainer extends React.Component {
 
       latestSelectedPhotoCategory,
       selectedPhotoIds,
+      listOfSelectedPhotos,
+      changeSelectedPhotoRank,
       handleSinglePhotoSelect,
+      removePhotoFromSelectedList,
 
       updatePhoto,
       deletePhoto
