@@ -1,5 +1,6 @@
 import React from 'react';
 import CategoryContainer from './CategoryContainer'
+import Toolbar from './Toolbar'
 
 /*
   Parent: VenuesContainer
@@ -15,6 +16,7 @@ class SingleVenue extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      categories: {},
       totalPhotosSelected: 0,
       latestSelectedPhotoCategory: 0,
       listOfSelectedPhotos: [],
@@ -23,7 +25,18 @@ class SingleVenue extends React.Component {
 
     // Binding this allows us to call this function from a lower level and still have access to where we're at now
     this.handleSinglePhotoSelect = this.handleSinglePhotoSelect.bind(this);
+    this.movePhotosToCategory = this.movePhotosToCategory.bind(this);
 
+  }
+
+  /* Yes, "Categorys" isn't spelled right, but I did it in the API to follow Ruby/Rails conventions */
+  componentWillMount() {
+    this.setState({ categories: this.props.venue.categorys });
+  }
+
+  /* Yes, "Categorys" isn't spelled right, but I did it in the API to follow Ruby/Rails conventions */
+  componentDidMount() {
+    this.setState({ categories: this.props.venue.categorys });
   }
 
   selectme = (photoLocation) => {
@@ -185,6 +198,65 @@ class SingleVenue extends React.Component {
 
   }
 
+  /*
+    Here is the big one.  If we want to move a batch of photos, we need to...
+
+    1.  Find the list of photos at the destination
+    2.  Get the highest rank at the destination
+    3.  Loop through the list of selected photos
+        A.  Add these photos to the destination list, while updating rank
+    4.  Loop through the list of selected photos again
+        A.  Remove them from the old list
+
+    5.  Deselect everything
+
+  */
+  movePhotosToCategory = (categoryDestinationId) => {
+
+    console.log("Move these photos to " + categoryDestinationId);
+
+    /* CHEATING:  The index is always one lower than the category ID.*/
+    var destinationPhotoList = this.props.venue.categorys[categoryDestinationId - 1].photos;
+    var originPhotoList = this.props.venue.categorys[this.state.latestSelectedPhotoCategory - 1].photos;
+
+    console.log(destinationPhotoList);
+    console.log(originPhotoList);
+
+    var highestDestinationRank = 0;
+
+    /* Ascend up the list */
+    destinationPhotoList.forEach(async (element) => {
+
+      console.log(element);
+
+      console.log("current:new::" + highestDestinationRank + ":" + element.rank);
+
+      if (element.rank > highestDestinationRank) {
+        await(highestDestinationRank = element.rank);
+      }
+    });
+
+    console.log("highest destination rank: " + highestDestinationRank);
+
+
+    var photosToMove = this.state.listOfSelectedPhotos;
+
+    console.log(photosToMove);
+
+
+    /* Update the rank and move into the new category */
+    photosToMove.forEach(async (currentPhoto) => {
+      currentPhoto.rank = highestDestinationRank + 1;
+      highestDestinationRank = highestDestinationRank + 1;
+      destinationPhotoList.push(currentPhoto);
+    });
+
+    console.log(destinationPhotoList);
+
+
+
+  }
+
   render () {
 
     const { 
@@ -199,8 +271,8 @@ class SingleVenue extends React.Component {
       deletePhoto
     } = this.props;
 
-    /* Yes, "Categorys" isn't spelled right, but I did it in the API to follow Ruby/Rails conventions */
-    const categories = venue.categorys.map((categories, index) => {
+    
+    const categories = this.state.categories.map((categories, index) => {
       return (
         <CategoryContainer
 
@@ -228,11 +300,15 @@ class SingleVenue extends React.Component {
     return (
       <div>
         {categories}
-          <div 
-            className={ this.state.totalPhotosSelected > 0 ? "toolbar slide_to_left" : "toolbar hidden" }
-          >
-            <h2 className="fancy_border_bottom">Move to:</h2>
-          </div>
+        <Toolbar 
+          totalPhotosSelected={this.state.totalPhotosSelected}
+          latestSelectedPhotoCategory={this.state.latestSelectedPhotoCategory}
+          selectedPhotoIds={this.state.selectedPhotoIds}
+          movePhotosToCategory={this.movePhotosToCategory}
+
+
+        />
+
 
       </div>
     );
