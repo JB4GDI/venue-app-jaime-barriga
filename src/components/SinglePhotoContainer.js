@@ -46,10 +46,12 @@ class SinglePhotoContainer extends React.Component {
   }
 
   moveButtonLeftClicked() {
+    this.setState({ showCaptionSaveButton: false });
     this.props.movePhotoLeft(this.props.adminId, this.props.venueId, this.props.categoryId, this.props.photo, this.props.photoList);
   }
 
   moveButtonRightClicked() {
+    this.setState({ showCaptionSaveButton: false });
     this.props.movePhotoRight(this.props.adminId, this.props.venueId, this.props.categoryId, this.props.photo, this.props.photoList);
   }
 
