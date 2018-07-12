@@ -50,6 +50,13 @@ p, textarea {
   width: 97%;
 }
 
+.pretzel {
+  height: 20px;
+  padding: 18px 20px 0 0;
+  width: 20px;
+
+}
+
 .header_text {
   color: rgb(71, 76, 72);
   font-family: Maitree, Georgia, serif;
@@ -116,7 +123,7 @@ p, textarea {
 
 .scrollable_photo_container {
 
-  margin-bottom: 90px;  
+  margin-bottom: 60px;  
   overflow: auto;
   position: relative;
 
@@ -198,6 +205,35 @@ p, textarea {
 
 }
 
+.toolbarButtonContainer {
+  margin-top: 20px;
+  position: relative;
+  text-align: center;
+}
+
+.movePhotosButton {
+  animation-name: primary_to_secondary;
+  animation-duration: 0.75s;
+  background-color: #fff;
+  border: 1px #bea052 solid;
+  color: #bea052;
+  cursor: pointer;
+  font-family: Maitree, Georgia, serif;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 10px auto 0px auto;
+  padding: 14px 0;
+  width: 150px;
+
+
+}
+
+.movePhotosButton:hover {
+  animation-name: secondary_to_primary;
+  animation-duration: 0.75s;
+  animation-fill-mode: forwards;
+}
+
 .slide_to_left {
   animation-name: slide_left;
   animation-duration: 1s;
@@ -207,9 +243,12 @@ p, textarea {
   animation-duration: 1s;
 }
 
+
 /* HELPER FUNCTIONS */
 
 .background_color_gold { background-color: #bea052; }
+
+.center_text { text-align: center; }
 
 .fancy_border_top { border-top: 1px dotted #c6c9c7; margin-top: 1px; }
 .fancy_border_bottom { border-bottom: 1px dotted #c6c9c7; }
@@ -263,6 +302,36 @@ p, textarea {
     transform: translate3d(0, 0, 0);
   }
 }
+
+@keyframes primary_to_secondary {
+  from {
+    background-color: #bea052;
+    border: 1px #fff solid;
+    color: #fff;
+  }
+
+  to {
+    background-color: #fff;
+    border: 1px #bea052 solid;
+    color: #bea052;
+  }
+}
+
+@keyframes secondary_to_primary {
+  from {
+    background-color: #fff;
+    border: 1px #bea052 solid;
+    color: #bea052;
+  }
+
+  to {
+    background-color: #bea052;
+    border: 1px #fff solid;
+    color: #fff;
+  }
+}
+
+
 
 
   

@@ -12,7 +12,8 @@ class App extends Component {
   constructor() {
     super();
     this.state = {      
-      venueAdmins: []
+      venueAdmins: [],
+      debugMode: false
     };
   }
 
@@ -69,17 +70,17 @@ class App extends Component {
   }
 
   /* For testing.  Takes all the photos I have online and puts them into the API */
-  // generateAllPhotos = () => {
+  generateAllPhotos = () => {
 
-  //   var thePhotos = allPhotos();
+    var thePhotos = allPhotos();
 
-  //   thePhotos.forEach( (photo) => {
-  //     this.submitPhoto(1, 1, 1, photo);
-  //   });
+    thePhotos.forEach( (photo) => {
+      this.submitPhoto(1, 1, 1, photo);
+    });
 
-  //   this.getAdmins();
+    this.getAdmins();
 
-  // }
+  }
 
 
   /* 
@@ -101,7 +102,14 @@ class App extends Component {
           getAdmins={this.getAdmins}
           getAdminById={this.getAdminById}
         />
-        <span onClick={ () => this.generateAllPhotos() }>Recreate Photos</span>
+        {
+          this.state.debugMode
+          ?
+          <span onClick={ () => this.generateAllPhotos() }>Recreate Photos</span>
+          :
+          <span className="hidden"></span>
+        }
+        
         <AdminsContainer 
           venueAdmins={venueAdmins}
           getAdmins={this.getAdmins}

@@ -17,7 +17,7 @@ class Toolbar extends React.Component {
 
     if (this.props.latestSelectedPhotoCategory === 1) {
       return (
-        <div className="buttonContainer">
+        <div className="toolbarButtonContainer fancy_border_top">
           <div className="movePhotosButton" onClick={ () => this.props.movePhotosToCategory(2) }>
             Profile
           </div>
@@ -31,7 +31,7 @@ class Toolbar extends React.Component {
       );
     } else if (this.props.latestSelectedPhotoCategory === 2) {
       return (
-        <div className="buttonContainer">
+        <div className="toolbarButtonContainer fancy_border_top">
           <div className="movePhotosButton" onClick={ () => this.props.movePhotosToCategory(1) }>
             Unassigned
           </div>
@@ -45,7 +45,7 @@ class Toolbar extends React.Component {
       );
     } else if (this.props.latestSelectedPhotoCategory === 3) {
       return (
-        <div className="buttonContainer">
+        <div className="toolbarButtonContainer fancy_border_top">
           <div className="movePhotosButton" onClick={ () => this.props.movePhotosToCategory(1) }>
             Unassigned
           </div>
@@ -59,7 +59,7 @@ class Toolbar extends React.Component {
       );
     } else if (this.props.latestSelectedPhotoCategory === 4) {
       return (
-        <div className="buttonContainer">
+        <div className="toolbarButtonContainer fancy_border_top">
           <div className="movePhotosButton" onClick={ () => this.props.movePhotosToCategory(1) }>
             Unassigned
           </div>
@@ -84,7 +84,7 @@ class Toolbar extends React.Component {
 
     return (
       <div className={ this.props.totalPhotosSelected > 0 ? "toolbar slide_to_left" : "toolbar hidden" } >
-        <h2 className="fancy_border_bottom">Move to:</h2>
+        <h2 className="center_text fancy_border_bottom">Move to:</h2>
 
         {this.renderToolbarButtons()}
 

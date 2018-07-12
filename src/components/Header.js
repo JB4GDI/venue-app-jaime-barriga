@@ -19,7 +19,7 @@ class Header extends React.Component {
 
     return (
       <div className="header fl">
-        <p className="header_text fl">Arrange Photos</p>
+        <img className="pretzel fl" src="http://jaimebarriga.com/img/pretzel.png" /><p className="header_text fl">Arrange Photos</p>
         {admin[0]}
       </div>
     );

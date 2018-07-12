@@ -66,8 +66,8 @@ class ScrollablePhotoContainer extends React.Component {
     return (
       <div className="scrollable_photo_container right_panel_width fl">
 
-        <div className="fancy_border_bottom fl">
-          <h2>{categoryName} photos</h2>
+        <div className="fancy_border_bottom full_width fl">
+          <h2 className="full_width">{categoryName} photos</h2>
         </div>
         
         <div className="scrollable_photo_list fancy_border_top fl">
