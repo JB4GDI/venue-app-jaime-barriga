@@ -126,13 +126,13 @@ class SinglePhotoContainer extends React.Component {
   onSubmit(e, photo) {
     e.preventDefault();
 
-    // An onChange has updated the photo caption, so it is there in the photo object
-    this.props.updatePhoto(this.props.adminId, this.props.venueId, this.props.categoryId, photo);
+    //* An onChange has updated the photo caption, so it is there in the photo object */
+    this.props.updateSinglePhoto(this.props.adminId, this.props.venueId, this.props.categoryId, photo);
     
     this.hideCaptionSaveButton();
   }
 
-  /* If selected, turn the background color to gold */
+  /* If photo has been selected, turn the background color to gold */
   renderBackgroundColor() {
 
     var currentPhotoId = this.props.photo.id;
@@ -150,7 +150,7 @@ class SinglePhotoContainer extends React.Component {
       <img 
         className="photo_image" 
         src={"http://jaimebarriga.com/venues/" + photo.filename} 
-        onClick={() => this.props.handleSinglePhotoSelect(photo, this.props.categoryId)} 
+        onClick={() => this.props.handleSinglePhotoSelect(photo, this.props.categoryId)}
       />
     );
   }
@@ -209,6 +209,7 @@ class SinglePhotoContainer extends React.Component {
       handleSinglePhotoSelect,
 
       updatePhoto,
+      updateSinglePhoto,
       handlePhotoDelete,
 
       selectPhoto,

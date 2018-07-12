@@ -35,7 +35,7 @@ class App extends Component {
 
   submitPhoto = (adminId, venueId, categoryId, photo) => {
 
-    console.log("Submitting photo: ");
+    console.log("APP Submitting photo: ");
     console.log(photo);
 
     axios.post(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/`), photo)
@@ -45,7 +45,7 @@ class App extends Component {
 
   updatePhoto = (adminId, venueId, categoryId, photo) => {
 
-    console.log("Updating photo: ");
+    console.log("APP Updating photo: ");
     console.log(photo);
 
     axios.patch(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photo.id}`), photo)
@@ -56,7 +56,7 @@ class App extends Component {
   /* Because we are altering the state, we need to reload the whole state when done. */
   deletePhoto = (adminId, venueId, categoryId, photo) => {
 
-    console.log("Deleting photo: ");
+    console.log("APP Deleting photo: ");
     console.log(photo);
 
 

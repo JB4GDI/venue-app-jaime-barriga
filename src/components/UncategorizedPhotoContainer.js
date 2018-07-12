@@ -20,6 +20,7 @@ class UncategorizedPhotoContainer extends React.Component {
       handleSinglePhotoSelect,
 
       updatePhoto,
+      updateSinglePhoto,
       handlePhotoDelete,
 
       selectPhoto,
@@ -29,7 +30,7 @@ class UncategorizedPhotoContainer extends React.Component {
 
      } = this.props;
 
-    const allPhotos = photos.map((photo, index) => {
+    const allPhotos = this.props.photos.map((photo, index) => {
       return (
         <SinglePhotoContainer
           key={photo.rank - 1}
@@ -46,6 +47,7 @@ class UncategorizedPhotoContainer extends React.Component {
           handleSinglePhotoSelect={this.props.handleSinglePhotoSelect}
 
           updatePhoto = {this.props.updatePhoto}
+          updateSinglePhoto = {this.props.updateSinglePhoto}
           handlePhotoDelete = {this.props.handlePhotoDelete}
 
           selectPhoto = {this.props.selectPhoto}
