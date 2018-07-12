@@ -74,6 +74,9 @@ class SingleVenue extends React.Component {
       /* It is driving me crazy that this works but setState() doesn't */
       this.state.selectedPhotoIds.splice(this.state.selectedPhotoIds.indexOf(photo.id), 1);
     }
+
+    // Force a refresh
+    this.componentDidMount();
   }
 
   /*
@@ -89,6 +92,10 @@ class SingleVenue extends React.Component {
     The app refuses to let photos be selected across categories.
   */
   handleSinglePhotoSelect = (currentPhotoClicked, categoryId) => {
+
+    console.log(currentPhotoClicked);
+    console.log(this.state.listOfSelectedPhotos)
+    console.log("latest category selected: " + this.state.latestSelectedPhotoCategory + " and categoryClicked: " + categoryId);
 
     // If the photo we clicked is in a totally new category
     if (this.state.latestSelectedPhotoCategory !== categoryId) {
@@ -108,27 +115,39 @@ class SingleVenue extends React.Component {
 
     } else {
 
+      console.log("Is this photo here already? " + this.state.listOfSelectedPhotos.includes(currentPhotoClicked));
+
       // We are in the same category we were in before.
 
-      // If the clicked photo is already in our list
-      if (this.state.listOfSelectedPhotos.includes(currentPhotoClicked)) {
+      // We need to loop through the selected photo list and see if we find a match.  If we do, remove it.
+      var foundMatch = false;
 
-        // Remove it from the listOfSelectedPhotos[]
-        const updatedSelectedPhotoList = this.state.listOfSelectedPhotos;
-        updatedSelectedPhotoList.splice(updatedSelectedPhotoList.indexOf(currentPhotoClicked), 1);
+      this.state.listOfSelectedPhotos.forEach( (selectedPhoto) => {
 
-        // Remove its id from selectedPhotoIds[]
-        const updatedSelectedPhotoIds = this.state.selectedPhotoIds
-        updatedSelectedPhotoIds.splice(updatedSelectedPhotoIds.indexOf(currentPhotoClicked.id), 1);
+        // If the clicked photo is already in our list
+        if (selectedPhoto.id === currentPhotoClicked.id) {
+          foundMatch = true;
 
-        this.setState({ 
-          listOfSelectedPhotos: updatedSelectedPhotoList,
-          selectedPhotoIds: updatedSelectedPhotoIds,
-          totalPhotosSelected: this.state.totalPhotosSelected - 1
-        });
+          // Remove it from the listOfSelectedPhotos[]
+          const updatedSelectedPhotoList = this.state.listOfSelectedPhotos;
+          updatedSelectedPhotoList.splice(updatedSelectedPhotoList.indexOf(currentPhotoClicked), 1);
 
-      } else {
+          // Remove its id from selectedPhotoIds[]
+          const updatedSelectedPhotoIds = this.state.selectedPhotoIds
+          updatedSelectedPhotoIds.splice(updatedSelectedPhotoIds.indexOf(currentPhotoClicked.id), 1);
 
+          this.setState({ 
+            listOfSelectedPhotos: updatedSelectedPhotoList,
+            selectedPhotoIds: updatedSelectedPhotoIds,
+            totalPhotosSelected: this.state.totalPhotosSelected - 1
+          });
+
+        }
+
+      });
+
+      if (foundMatch === false) {
+        
         // This is a new photo so push it onto the list of selected photos and update the state        
 
         const updatedSelectedPhotoList = this.state.listOfSelectedPhotos;
