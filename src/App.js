@@ -22,9 +22,12 @@ class App extends Component {
   }
 
   getAdmins = () => {
+    console.log("getAdmins running");
     axios.get(venueApi('venueadmins'))
     .then((res) => this.setState({ venueAdmins: res.data }) )
     .catch((err) => console.log(err.response.data) );
+
+    console.log("getAdmins finsihed");
   }
 
   getAdminById = (admin_id) => {
@@ -60,7 +63,7 @@ class App extends Component {
     console.log(photo);
 
 
-    axios.delete(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photo.id}`), photo)
+    return axios.delete(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photo.id}`), photo)
     .then((res) => console.log("Photo successfully deleted!") )
     .catch((err) => console.log(err.response.data) );
   }
@@ -73,6 +76,9 @@ class App extends Component {
   //   thePhotos.forEach( (photo) => {
   //     this.submitPhoto(1, 1, 1, photo);
   //   });
+
+  //   this.getAdmins();
+
   // }
 
 
@@ -95,7 +101,7 @@ class App extends Component {
           getAdmins={this.getAdmins}
           getAdminById={this.getAdminById}
         />
-        <p onClick={ () => this.generateAllPhotos() }>Recreate Photos</p>
+        <span onClick={ () => this.generateAllPhotos() }>Recreate Photos</span>
         <AdminsContainer 
           venueAdmins={venueAdmins}
           getAdmins={this.getAdmins}

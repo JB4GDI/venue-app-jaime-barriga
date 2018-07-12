@@ -1,6 +1,10 @@
 import React from 'react';
+import axios from 'axios';
+
 import CategoryContainer from './CategoryContainer'
 import Toolbar from './Toolbar'
+
+import venueApi from '../helpers/venueApi';
 
 /*
   Parent: VenuesContainer
@@ -305,7 +309,7 @@ class SingleVenue extends React.Component {
     var highestDestinationRank = 0;
 
     /* Ascend up the list */
-    await(destinationPhotoList.forEach(async (element) => {
+    destinationPhotoList.forEach(async (element) => {
 
       console.log(element);
 
@@ -314,7 +318,7 @@ class SingleVenue extends React.Component {
       if (element.rank > highestDestinationRank) {
         await(highestDestinationRank = element.rank);
       }
-    }));
+    });
 
     console.log("highest destination rank: " + highestDestinationRank);
 
@@ -324,51 +328,85 @@ class SingleVenue extends React.Component {
 
 
     /* Remove from old category, then update the rank and move into the new category */
-    await(photosToMove.forEach(async (currentPhoto) => {
+    photosToMove.forEach(async (currentPhoto) => {
 
-      console.log("Currently looking at: id" + currentPhoto.id + "with rank " + currentPhoto.rank);
+      console.log("Currently looking at: id" + currentPhoto.id + "with rank " + currentPhoto.rank);      
+      console.log("***************");
       console.log(currentPhoto);
-
-      if (originPhotoList.includes(currentPhoto)) {        
-        this.props.deletePhoto(this.props.adminId, this.props.venueId, this.state.latestSelectedPhotoCategory, currentPhoto);
-        originPhotoList.splice(originPhotoList.indexOf(currentPhoto), 1);
-      }
-
-      console.log("new origin list: ");
       console.log(originPhotoList);
+      console.log("***************");
+
+      originPhotoList.forEach (async (originPhoto) => {
+
+        console.log(originPhoto.id);
+
+        if (originPhoto.id === currentPhoto.id) {
+          console.log("READY TO DELETE PHOTO");
+          const why = await(this.testDeletePhoto(this.props.adminId, this.props.venueId, this.state.latestSelectedPhotoCategory, currentPhoto));
+        };
+
+      });
 
       currentPhoto.rank = highestDestinationRank + 1;
-      highestDestinationRank = highestDestinationRank + 1;
-      // destinationPhotoList.push(currentPhoto);
+      highestDestinationRank = highestDestinationRank + 1;      
 
-      this.props.submitPhoto(this.props.adminId, this.props.venueId, categoryDestinationId, currentPhoto)
+      const please = await(this.testSubmitPhoto(this.props.adminId, this.props.venueId, categoryDestinationId, currentPhoto));
 
-    }));
+    });
 
     var emptyArray = [];
 
-    await(this.setState({
+    this.setState({
       totalPhotosSelected: 0,
       listOfSelectedPhotos: [],
       selectedPhotoIds: []
-    }));
+    });
 
-    console.log(originPhotoList);
 
-    console.log("PREPEARE TO SORT");
-
-    await(originPhotoList = this.sortPhotos(originPhotoList));
-
-    console.log(originPhotoList);
-
-    await(this.props.getAdmins());
-    await(this.componentDidMount());
-
-    for (let key in this.refs) {
-      await(this.refs[key].componentDidMount());
-    }
+    // console.log(originPhotoList);
+    console.log("Ready to reload");    
 
     console.log("SHOULD BE MOUNTED NOW HMMMMM");
+  }
+
+  /* 
+    Is this overkill?  Yes.  But does it work?  Also yes. 
+
+    The app gets unstable when you move a photo (delete in a location and create in another).
+    This forces a refresh of everything, and prevents the API promises from messing with us.
+  */
+  refreshAppAndChildren = () => {
+
+    /* Reset the whole app */
+    this.props.getAdmins();
+
+    console.log("refreshAllChildren");
+    for (let key in this.refs) {
+      console.log("refreshAllChildren: + " + key);
+      this.refs[key].getPhotosFromAPI(this.props.adminId, this.props.venueId);
+    }
+  }
+
+  /* We call a refresh on everything after this API call so the promises don't force us out of sync */
+  testDeletePhoto = (adminId, venueId, categoryId, photo) => {
+
+    console.log("APP Deleting photo: ");
+    console.log(photo);
+
+    axios.delete(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photo.id}`), photo)
+    .then((res) => this.refreshAppAndChildren() )
+    .catch((err) => console.log(err.response.data) );
+  }
+
+  /* We call a refresh on everything after this API call so the promises don't force us out of sync */
+  testSubmitPhoto = (adminId, venueId, categoryId, photo) => {
+
+    console.log("APP Submitting photo: ");
+    console.log(photo);
+
+    axios.post(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/`), photo)
+    .then((res) => this.refreshAppAndChildren() )
+    .catch((err) => console.log(err.response.data) );
   }
 
   render () {

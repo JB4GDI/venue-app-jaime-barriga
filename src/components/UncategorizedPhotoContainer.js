@@ -33,7 +33,7 @@ class UncategorizedPhotoContainer extends React.Component {
     const allPhotos = this.props.photos.map((photo, index) => {
       return (
         <SinglePhotoContainer
-          key={photo.rank - 1}
+          key={photo.id}
           index={photo.rank - 1}
           photo={photo}
           currentHighestPhotoRank = {photos[photos.length-1].rank}

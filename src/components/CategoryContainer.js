@@ -33,6 +33,7 @@ class CategoryContainer extends React.Component {
     // this.deselectAllPhotos = this.deselectAllPhotos.bind(this);
     // this.toggleSelectedPhoto = this.toggleSelectedPhoto.bind(this);
 
+    this.getPhotosFromAPI = this.getPhotosFromAPI.bind(this);
     this.movePhotoLeft = this.movePhotoLeft.bind(this);
     this.movePhotoRight = this.movePhotoRight.bind(this);
     this.updateSinglePhoto = this.updateSinglePhoto.bind(this);
@@ -40,11 +41,13 @@ class CategoryContainer extends React.Component {
   }
 
   componentDidMount() {
-    this.getPhotosFromAPI(this.props.adminId, this.props.venueId, this.props.category.id);
+    this.getPhotosFromAPI(this.props.adminId, this.props.venueId);
   }
 
 
-  getPhotosFromAPI = (adminId, venueId, categoryId) => {
+  getPhotosFromAPI = (adminId, venueId) => {
+
+    var categoryId = this.props.category.id;
 
     console.log("getPhotosFromAPI: " + adminId + ":" + venueId + ":" + categoryId);
 
@@ -75,9 +78,8 @@ class CategoryContainer extends React.Component {
   /* This is a hack, but maybe it's a hack that's genius */
   sortPhotos = (photos) => {
 
-    console.log("SORTFING PHOTOS");
-
-    console.log(photos);
+    // console.log("SORTFING PHOTOS");
+    // console.log(photos);
 
     function comparePhotoRank(a,b) {
       if (a.rank < b.rank)
@@ -93,7 +95,7 @@ class CategoryContainer extends React.Component {
       photos[i].rank = i + 1 ;
     }
 
-    console.log(photos);
+    // console.log(photos);
 
     return photos;
     
@@ -124,7 +126,7 @@ class CategoryContainer extends React.Component {
     This function needs to also update the state.listOfSelectedPhotos
       TODO:  This should reall be handled with a function call to state
   */
-  movePhotoLeft = async (adminId, venueId, categoryId, photo, photoList) => {
+  movePhotoLeft = async (adminId, venueId, categoryId, photo) => {
 
     var originalRightPhoto = photo;
     var originalLeftPhoto = this.state.photos[photo.rank - 2];
@@ -176,10 +178,10 @@ class CategoryContainer extends React.Component {
     This function needs to also update the state.listOfSelectedPhotos
       TODO:  This should reall be handled with a function call to state
   */
-  movePhotoRight = async (adminId, venueId, categoryId, photo, photoList) => {
+  movePhotoRight = async (adminId, venueId, categoryId, photo) => {
 
     var originalLeftPhoto = photo;     
-    var originalRightPhoto = photoList[photo.rank];
+    var originalRightPhoto = this.state.photos[photo.rank];
 
     var newRightPhotoRank = originalRightPhoto.rank - 1;
     var newLeftPhotoRank = originalLeftPhoto.rank + 1;

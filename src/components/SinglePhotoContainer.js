@@ -46,17 +46,17 @@ class SinglePhotoContainer extends React.Component {
 
   moveButtonLeftClicked() {
     this.hideCaptionSaveButton();
-    this.props.movePhotoLeft(this.props.adminId, this.props.venueId, this.props.categoryId, this.props.photo, this.props.photoList);
+    this.props.movePhotoLeft(this.props.adminId, this.props.venueId, this.props.categoryId, this.props.photo);
   }
 
   moveButtonRightClicked() {
     this.hideCaptionSaveButton();
-    this.props.movePhotoRight(this.props.adminId, this.props.venueId, this.props.categoryId, this.props.photo, this.props.photoList);
+    this.props.movePhotoRight(this.props.adminId, this.props.venueId, this.props.categoryId, this.props.photo);
   }
 
   deleteButtonClicked() {
     this.hideCaptionSaveButton();
-    this.props.handlePhotoDelete(this.props.adminId, this.props.venueId, this.props.categoryId, this.props.photo, this.props.photoList);
+    this.props.handlePhotoDelete(this.props.adminId, this.props.venueId, this.props.categoryId, this.props.photo);
   }
 
   renderDeleteButton() {
