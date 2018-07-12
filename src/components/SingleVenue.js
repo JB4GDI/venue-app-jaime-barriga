@@ -93,10 +93,6 @@ class SingleVenue extends React.Component {
   */
   handleSinglePhotoSelect = (currentPhotoClicked, categoryId) => {
 
-    console.log(currentPhotoClicked);
-    console.log(this.state.listOfSelectedPhotos)
-    console.log("latest category selected: " + this.state.latestSelectedPhotoCategory + " and categoryClicked: " + categoryId);
-
     // If the photo we clicked is in a totally new category
     if (this.state.latestSelectedPhotoCategory !== categoryId) {
 
@@ -114,8 +110,6 @@ class SingleVenue extends React.Component {
       });
 
     } else {
-
-      console.log("Is this photo here already? " + this.state.listOfSelectedPhotos.includes(currentPhotoClicked));
 
       // We are in the same category we were in before.
 
