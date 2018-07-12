@@ -27,12 +27,10 @@ class CategoryContainer extends React.Component {
       photos: []
     };
 
-    // Binding this allows us to call this function from a lower level and still have access to where we're at now    
-    // this.selectPhoto = this.selectPhoto.bind(this);
-    // this.deselectPhoto = this.deselectPhoto.bind(this);
-    // this.deselectAllPhotos = this.deselectAllPhotos.bind(this);
-    // this.toggleSelectedPhoto = this.toggleSelectedPhoto.bind(this);
-
+    /*
+      Binding allows us to call these functions from other levels while providing
+      access to this component's 'this'
+    */
     this.getPhotosFromAPI = this.getPhotosFromAPI.bind(this);
     this.movePhotoLeft = this.movePhotoLeft.bind(this);
     this.movePhotoRight = this.movePhotoRight.bind(this);
@@ -101,6 +99,10 @@ class CategoryContainer extends React.Component {
     
   }
 
+  /* 
+    After updating a single photo, we want to call the API to update the state.  We make
+    that call as the update is returning so the app stays in sync.
+  */
   updateSinglePhoto = (adminId, venueId, categoryId, photo) => {
 
     console.log("CATEGORY Updating photo: ");
@@ -111,6 +113,35 @@ class CategoryContainer extends React.Component {
     .catch((err) => console.log(err.response.data))
   }
 
+  /* 
+    If we have multiple photos to update in the same category, we have a small problem:
+
+    We can't call the API to get photos after only one photo has updated, because it will
+    have 2 photos with the same rank, and that is a bad state so it will forcibly reindex 
+    everything, messing up the order a tiny bit.  
+
+    We only call getPhotosFromAPI() after the FINAL update is made.
+  */
+  updateMultiplePhotos = (adminId, venueId, categoryId, photoArray) => {
+
+    for (let i = 0; i < photoArray.length - 1; i++) {
+      axios.patch(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photoArray[i].id}`), photoArray[i])
+      .then((res) => console.log("photo with id " + photoArray[i].id + " updated."))
+      .catch((err) => console.log(err.response.data))
+    }
+
+    /* For the last photo in the array, have it return a call to getPhotosFromAPI() */
+    if (photoArray.length > 1) {
+      axios.patch(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photoArray[photoArray.length - 1].id}`), photoArray[photoArray.length - 1])
+      .then((res) => this.getPhotosFromAPI(adminId, venueId, categoryId))
+      .catch((err) => console.log(err.response.data))
+    }
+  }
+
+  /*
+    After we delete a single photo, we want to call the API to update the state.  We make
+    that call as the update is returning so the app stays in sync.
+  */
   deleteSinglePhoto = (adminId, venueId, categoryId, photo) => {
 
     console.log("CATEGORY Updating photo: ");
@@ -122,9 +153,9 @@ class CategoryContainer extends React.Component {
   }
 
   /* 
-    Take a photo and have it swap places with the photo on its left.
-    This function needs to also update the state.listOfSelectedPhotos
-      TODO:  This should reall be handled with a function call to state
+    Take a photo and have it swap places with the photo on its left.  This is done
+    by swapping the rank, updating the API, and refreshing the state.
+    
   */
   movePhotoLeft = async (adminId, venueId, categoryId, photo) => {
 
@@ -162,11 +193,12 @@ class CategoryContainer extends React.Component {
     originalRightPhoto.rank = newRightPhotoRank;
     originalLeftPhoto.rank = newLeftPhotoRank;
 
-    await(this.updateSinglePhoto(adminId, venueId, categoryId, originalLeftPhoto));
-    console.log("UPDATE 1 BETTER BE DONE");
-    await(this.updateSinglePhoto(adminId, venueId, categoryId, originalRightPhoto));
+    // await(this.updateSinglePhoto(adminId, venueId, categoryId, originalLeftPhoto));
+    // console.log("UPDATE 1 BETTER BE DONE");
+    // await(this.updateSinglePhoto(adminId, venueId, categoryId, originalRightPhoto));
+    // console.log("UPDATE 2 BETTER BE DONE");
 
-    console.log("UPDATE 2 BETTER BE DONE");
+    await(this.updateMultiplePhotos(adminId, venueId, categoryId, [originalLeftPhoto, originalRightPhoto]));
 
     // Update the application state with the new information
     // this.setState({ photos: this.sortPhotos(photoList) });
@@ -176,7 +208,6 @@ class CategoryContainer extends React.Component {
   /* 
     Take a photo and have it swap places with the photo on its right.
     This function needs to also update the state.listOfSelectedPhotos
-      TODO:  This should reall be handled with a function call to state
   */
   movePhotoRight = async (adminId, venueId, categoryId, photo) => {
 
@@ -211,8 +242,10 @@ class CategoryContainer extends React.Component {
 
     // Update the API with the new information
 
-    await(this.updateSinglePhoto(adminId, venueId, categoryId, originalLeftPhoto));
-    await(this.updateSinglePhoto(adminId, venueId, categoryId, originalRightPhoto));
+    // await(this.updateSinglePhoto(adminId, venueId, categoryId, originalLeftPhoto));
+    // await(this.updateSinglePhoto(adminId, venueId, categoryId, originalRightPhoto));
+
+    await(this.updateMultiplePhotos(adminId, venueId, categoryId, [originalLeftPhoto, originalRightPhoto]));
 
     // Update the application state with the new information
     // this.setState({ photos: this.sortPhotos(photoList) });
@@ -222,7 +255,7 @@ class CategoryContainer extends React.Component {
 
   /*
     Given a photo (and all the other params needed to update) this will lower the 
-    rank on the photo by 1 and update it.
+    rank on the photo by 1 and update it in the API.
   */
   lowerRankAndUpdate = (adminId, venueId, categoryId, photo) => {
 
@@ -250,7 +283,7 @@ class CategoryContainer extends React.Component {
           A.  If the photo is above the deleted one in rank, lower rank by 1
           B.  If the photo is the one to delete, delete it.
 
-    We have to set this up so it fires in order.
+    This needs to be done in order, hence the async/awaits.
   */
   handlePhotoDelete = async (adminId, venueId, categoryId, photo) => {
 
@@ -290,7 +323,10 @@ class CategoryContainer extends React.Component {
 
   }
 
-  /* There is a big difference between the Unassigned Category and all the rest.  Render them differently here. */
+  /* 
+    UncategorizedPhotoContainer doesn't have access to as many functions as
+    ScrollablePhotoContainer does.
+  */
   renderCategory = (category) => {
     if (category.name === 'Unassigned') {
       return (
@@ -313,7 +349,6 @@ class CategoryContainer extends React.Component {
           updateSinglePhoto = {this.updateSinglePhoto}
           handlePhotoDelete = {this.handlePhotoDelete}
 
-          deselectPhoto = {this.deselectPhoto}
           toggleSelectedPhoto = {this.toggleSelectedPhoto}
         />
       );
@@ -323,6 +358,7 @@ class CategoryContainer extends React.Component {
           key={category.id}
           index={category.id}
           categoryName={category.name}
+
           photos={this.state.photos}
 
           adminId={this.props.adminId}
@@ -339,8 +375,6 @@ class CategoryContainer extends React.Component {
           updateSinglePhoto = {this.updateSinglePhoto}
           handlePhotoDelete = {this.handlePhotoDelete}
 
-          selectPhoto = {this.selectPhoto}
-          deselectPhoto = {this.deselectPhoto}
           toggleSelectedPhoto = {this.toggleSelectedPhoto}
 
           movePhotoLeft = {this.movePhotoLeft}

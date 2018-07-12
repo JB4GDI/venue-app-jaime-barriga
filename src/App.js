@@ -8,20 +8,38 @@ import venueApi from './helpers/venueApi';
 import Header from './components/Header';
 import AdminsContainer from './components/AdminsContainer';
 
+/*
+  This app lets us interact directly with the venue-API containing all a venue's photos.
+
+  The API is arranged in a way that is mimicked by the app:
+
+  Admin
+    Venue
+      Category (uncategorized/profile/home rental/planning)
+        Photos
+
+  Some of the global functions that interact with the API (through axios) live here.
+*/
 class App extends Component {
   constructor() {
     super();
-    this.state = {      
-      venueAdmins: [],
-      debugMode: false
+    this.state = {  
+      venueAdmins: [], // This stores the state of the app from the API
+      debugMode: false // Right now, all this does is turn on a button to regenerate all photos
     };
   }
 
-  /* Before we are finished loading the application, we will populate everything into App.state */
-  componentWillMount() {
+  /* 
+    Before we are finished loading the application, we will populate everything into App.state 
+  */
+  componentDidMount() {
     this.getAdmins();
   }
 
+  /* 
+    This will call the API and set the state to whatever comes back.  It basically
+    refreshes the app.
+  */
   getAdmins = () => {
     console.log("getAdmins running");
     axios.get(venueApi('venueadmins'))
@@ -29,12 +47,6 @@ class App extends Component {
     .catch((err) => console.log(err.response.data) );
 
     console.log("getAdmins finsihed");
-  }
-
-  getAdminById = (admin_id) => {
-    axios.get(venueApi(`venueadmins/${admin_id}`))
-    .then((res) => this.setState({ venueAdmin: res.data }) )
-    .catch((err) => console.log(err.response.data) );
   }
 
   submitPhoto = (adminId, venueId, categoryId, photo) => {
@@ -84,8 +96,7 @@ class App extends Component {
 
 
   /* 
-
-    There are two main blocks to this, application
+    There are two main blocks to this application
 
     1.  The Header
     2.  Everything else.  We start the chain with the admin (AdminsContainer)
@@ -100,7 +111,6 @@ class App extends Component {
         <Header
           venueAdmins={venueAdmins}
           getAdmins={this.getAdmins}
-          getAdminById={this.getAdminById}
         />
         {
           this.state.debugMode

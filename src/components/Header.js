@@ -1,6 +1,13 @@
 import React from 'react';
 import Username from './Username'
 
+/*
+  Parent: App
+  Child: Username
+
+  Very simple.  This generates the header on the page, and has a child that displays
+  the username
+*/
 class Header extends React.Component {
 
   render() {

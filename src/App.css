@@ -1,4 +1,6 @@
+/********************/
 /* GLOBAL OVERRIDES */
+/********************/
 
 h1 {
   color: #474c48;
@@ -26,20 +28,17 @@ body {
   padding: 0;
 }
 
-a {
-  color: #bea052;
-}
-
 p, textarea {
   color: #474c48;
   font-family: Maitree,Georgia,serif;
   font-size: 16px;
   font-weight: 300;
-  line-height: 1.5;
-  
+  line-height: 1.5;  
 }
 
+/*******************/
 /* CLASS OVERRIDES */
+/*******************/
 
 .header {
   align-items: center;
@@ -93,13 +92,12 @@ p, textarea {
 }
 
 .single_photo_container {
-  margin-right: 5px;
-  width: 176px;
-  height: 160px;
-
   animation-name: appear;
   animation-duration: 1.5s;
   animation-fill-mode: forwards;
+  margin-right: 5px;
+  width: 176px;
+  height: 160px;
 }
 
 .photo_image {
@@ -122,11 +120,9 @@ p, textarea {
 }
 
 .scrollable_photo_container {
-
   margin-bottom: 60px;  
   overflow: auto;
   position: relative;
-
 }
 
 .leftrightbuttoncontainer {
@@ -195,14 +191,12 @@ p, textarea {
   top: -84px;
 }
 
-.toolbar {
-  right: 0;
-  
+.toolbar {  
   background-color: #fff;
   height: 400px;
   position: fixed;
+  right: 0;
   width: 200px;
-
 }
 
 .toolbarButtonContainer {
@@ -224,8 +218,6 @@ p, textarea {
   margin: 10px auto 0px auto;
   padding: 14px 0;
   width: 150px;
-
-
 }
 
 .movePhotosButton:hover {
@@ -243,8 +235,9 @@ p, textarea {
   animation-duration: 1s;
 }
 
-
+/********************/
 /* HELPER FUNCTIONS */
+/********************/
 
 .background_color_gold { background-color: #bea052; }
 
@@ -264,7 +257,9 @@ p, textarea {
 
 .relative { position: relative; }
 
+/**************/
 /* ANIMATIONS */
+/**************/
 
 @keyframes appear {
   from { opacity: 0; }
@@ -329,9 +324,4 @@ p, textarea {
     border: 1px #fff solid;
     color: #fff;
   }
-}
-
-
-
-
-  
+}  

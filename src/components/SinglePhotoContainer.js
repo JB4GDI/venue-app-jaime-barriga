@@ -148,7 +148,8 @@ class SinglePhotoContainer extends React.Component {
   renderSinglePhotoImage(photo) {
     return (
       <img 
-        className="photo_image" 
+        className="photo_image"
+        alt={photo.caption}
         src={"http://jaimebarriga.com/venues/" + photo.filename} 
         onClick={() => this.props.handleSinglePhotoSelect(photo, this.props.categoryId)}
       />
