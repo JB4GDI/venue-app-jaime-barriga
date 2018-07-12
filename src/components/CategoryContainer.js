@@ -36,6 +36,7 @@ class CategoryContainer extends React.Component {
     this.movePhotoLeft = this.movePhotoLeft.bind(this);
     this.movePhotoRight = this.movePhotoRight.bind(this);
     this.updateSinglePhoto = this.updateSinglePhoto.bind(this);
+    this.deleteSinglePhoto = this.deleteSinglePhoto.bind(this);
   }
 
   componentDidMount() {
@@ -104,6 +105,16 @@ class CategoryContainer extends React.Component {
     console.log(photo);
 
     axios.patch(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photo.id}`), photo)
+    .then((res) => this.getPhotosFromAPI(adminId, venueId, categoryId))
+    .catch((err) => console.log(err.response.data))
+  }
+
+  deleteSinglePhoto = (adminId, venueId, categoryId, photo) => {
+
+    console.log("CATEGORY Updating photo: ");
+    console.log(photo);
+
+    axios.delete(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photo.id}`), photo)
     .then((res) => this.getPhotosFromAPI(adminId, venueId, categoryId))
     .catch((err) => console.log(err.response.data))
   }
@@ -220,13 +231,13 @@ class CategoryContainer extends React.Component {
     // var photoIndex = originalPhotoList.indexOf(photo);
     // console.log(photoIndex);
 
-    photo.rank = photo.rank -1;
+    photo.rank = photo.rank - 1;
 
     // originalPhotoList[photoIndex] = photo;
 
     // this.setState({ photos: originalPhotoList });
 
-    this.props.updatePhoto(adminId, venueId, categoryId, photo);
+    this.updateSinglePhoto(adminId, venueId, categoryId, photo);
   }
 
 
@@ -246,40 +257,34 @@ class CategoryContainer extends React.Component {
     console.log(this.props.listOfSelectedPhotos);
 
     var originalPhotoList = this.state.photos;
-    // var originalSelectedPhotoList = this.state.selectedPhotos;
 
-    //1.  TODO: Handle removing this photo from the  "select" list
+    //1.  TODO: Handle removing this photo from the  "select" list by SETSTATE.
     if (this.props.listOfSelectedPhotos.includes(photo)) {
       await(this.props.removePhotoFromSelectedList(photo));
     }
 
     var deletedPhotoRank = photo.rank;
-
     console.log("Deleting the photo with rank " + deletedPhotoRank);
 
     /* 
-      Again, it's very important that we find the photo to delete FIRST, then update the rest
-      in order.
+      Again, it's very important that we start with the highest ranked photos FIRST,
+      because we don't want to delete a low one and mess up the order.  Once that's
+      done, the photo to delete will be the last one we deal with.
     */
     await(originalPhotoList.reverse().forEach(async (element) => {
 
       console.log("Looking at photo: " + element.rank + ":" + element.filename);
 
       if (element.rank === deletedPhotoRank) {
-        await(this.props.deletePhoto(adminId, venueId, categoryId, element));
-        await(originalPhotoList.splice(originalPhotoList.indexOf(element), 1));
+        await(this.deleteSinglePhoto(adminId, venueId, categoryId, element));
       } else if (element.rank > deletedPhotoRank) {
         await(this.lowerRankAndUpdate(adminId, venueId, categoryId, element));
       }
       
     }));
 
-    console.log(this.props.category.photos);
+    console.log(this.state.photos);
     console.log("done");
-
-    // Forcibly update the state
-    await(this.componentDidMount());
-
 
   }
 
