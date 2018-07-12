@@ -85,7 +85,7 @@ p, textarea {
 
 .scrollable_photo_list {
   display: flex;
-  height: 180px;
+  height: 200px;
   overflow-x: auto;
   overflow-y: hidden;
   width: 780px;
@@ -95,9 +95,10 @@ p, textarea {
   animation-name: appear;
   animation-duration: 1.5s;
   animation-fill-mode: forwards;
-  margin-right: 5px;
+
+  margin: 0 5px 5px 0;
   width: 176px;
-  height: 160px;
+  height: 180px;
 }
 
 .photo_image {
@@ -108,7 +109,7 @@ p, textarea {
 }
 
 .photo_caption {
-  height: 54px;
+  height: 74px;
   overflow-x: hidden; /* There are some instances where the text is the EXACT size as the textara, triggering an ugly scrollbar.  This fixes it. */
   text-align: center;
   width: 170px;  
