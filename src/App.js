@@ -41,47 +41,35 @@ class App extends Component {
     refreshes the app.
   */
   getAdmins = () => {
-    console.log("getAdmins running");
     axios.get(venueApi('venueadmins'))
     .then((res) => this.setState({ venueAdmins: res.data }) )
     .catch((err) => console.log(err.response.data) );
-
-    console.log("getAdmins finsihed");
   }
 
   submitPhoto = (adminId, venueId, categoryId, photo) => {
-
-    console.log("APP Submitting photo: ");
-    console.log(photo);
-
     axios.post(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/`), photo)
     .then((res) => console.log("Photo successfully submitted!"))
     .catch((err) => console.log(err.response.data))
   }
 
   updatePhoto = (adminId, venueId, categoryId, photo) => {
-
-    console.log("APP Updating photo: ");
-    console.log(photo);
-
     axios.patch(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photo.id}`), photo)
     .then((res) => console.log("Photo successfully updated!"))
     .catch((err) => console.log(err.response.data))
   }
 
-  /* Because we are altering the state, we need to reload the whole state when done. */
   deletePhoto = (adminId, venueId, categoryId, photo) => {
-
-    console.log("APP Deleting photo: ");
-    console.log(photo);
-
-
-    return axios.delete(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photo.id}`), photo)
+    axios.delete(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photo.id}`), photo)
     .then((res) => console.log("Photo successfully deleted!") )
     .catch((err) => console.log(err.response.data) );
   }
 
-  /* For testing.  Takes all the photos I have online and puts them into the API */
+  /* 
+    A secret debug function.  If you're in debug mode, it will takes all the photos I have online 
+    and put them into the API.
+
+    Refresh the app when this is done.
+  */
   generateAllPhotos = () => {
 
     var thePhotos = allPhotos();
@@ -89,9 +77,6 @@ class App extends Component {
     thePhotos.forEach( (photo) => {
       this.submitPhoto(1, 1, 1, photo);
     });
-
-    this.getAdmins();
-
   }
 
 
@@ -100,11 +85,10 @@ class App extends Component {
 
     1.  The Header
     2.  Everything else.  We start the chain with the admin (AdminsContainer)
-
   */
   render() {
 
-    const { venueAdmins, totalPhotosSelected } = this.state;
+    const { venueAdmins } = this.state;
 
     return (
       <div className="App">

@@ -1,5 +1,12 @@
 import React from 'react';
 
+/*
+  Parents: UncategorizedPhotoContainer
+           ScrollablePhotoContainer
+  
+
+  This SinglePhotoContainer contains and renders a single photo.
+*/
 class SinglePhotoContainer extends React.Component {
 
   constructor(props) {
@@ -15,17 +22,13 @@ class SinglePhotoContainer extends React.Component {
     this.setState({ caption: this.props.photo.caption });
   }
 
-  showLeftRightMoveButtons() {
-    this.setState({ mouseIsHovering: true });
-  }  
+  showLeftRightMoveButtons() { this.setState({ mouseIsHovering: true }); }  
 
-  hideLeftRightMoveButtons() {
-    this.setState({ mouseIsHovering: false });
-  }
+  hideLeftRightMoveButtons() { this.setState({ mouseIsHovering: false }); }
 
-  showCaptionSaveButton() {
-    this.setState({ showCaptionSaveButton: true });
-  }
+  showCaptionSaveButton() { this.setState({ showCaptionSaveButton: true }); }
+
+  hideCaptionSaveButton() { this.setState({ showCaptionSaveButton: false }); }
 
   handleTextareaChange(e, photo) {
     this.showCaptionSaveButton();
@@ -40,9 +43,7 @@ class SinglePhotoContainer extends React.Component {
     this.setState({ caption: e.target.value });
   }
 
-  hideCaptionSaveButton() {
-    this.setState({ showCaptionSaveButton: false });
-  }
+  
 
   moveButtonLeftClicked() {
     this.hideCaptionSaveButton();
@@ -70,12 +71,12 @@ class SinglePhotoContainer extends React.Component {
   }
 
   /*
-    This function is a little busy, but essentiall it renders the "move left/right" buttons on a photo.  
+    This function is a little busy, but essentially it renders the "move left/right" buttons on a photo.  
     If it's the leftmost photo, there's no "move left."  And if it is the rightmost (highest rank) it has no "move right."
 
-    Also, the Unassigned category doesn't display anything
+    Also, the Unassigned category doesn't display anything.
 
-    When you click them, it calls a function to move them one over.
+    When you click them, it calls the proper function to move them one over.
   */
   renderLeftRightMoveButtons() {    
     if(this.props.categoryId > 1) {
@@ -123,6 +124,9 @@ class SinglePhotoContainer extends React.Component {
     }
   }
 
+  /*
+    Handles a save of the textarea
+  */
   onSubmit(e, photo) {
     e.preventDefault();
 

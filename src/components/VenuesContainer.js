@@ -5,7 +5,10 @@ import SingleVenue from './SingleVenue'
   Parent: AdminsContainer
   Child: SingleVenue
 
-  At this point, we have all the venues attached to the admin that came in.  Extract the top venue - venue[0].
+  At this point, we have all the venues attached to the admin that came in.
+
+  Since we'll assume for now that all admins will only be in charge of
+  1 venue, we extract the top venue - venue[0].
 */
 class VenuesContainer extends React.Component {
 
@@ -39,7 +42,6 @@ class VenuesContainer extends React.Component {
         />
       );
     });
-
 
     return (
       <div className="venue_container full_width fl">

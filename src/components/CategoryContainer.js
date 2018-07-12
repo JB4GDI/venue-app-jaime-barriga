@@ -6,7 +6,6 @@ import ScrollablePhotoContainer from './ScrollablePhotoContainer';
 
 import venueApi from '../helpers/venueApi';
 
-
 /*
   Parent: SingleVenue
   Children:  
@@ -20,6 +19,12 @@ import venueApi from '../helpers/venueApi';
   We do a lot of the heavy lifting for photos here.
 */
 class CategoryContainer extends React.Component {
+
+  /*
+    Note, the photos are entirely state driven, and they always need to be pulled directly from the API
+
+    Doing anything else will only lead to heartache.
+  */
 
   constructor(props) {
     super(props);
@@ -38,76 +43,33 @@ class CategoryContainer extends React.Component {
     this.deleteSinglePhoto = this.deleteSinglePhoto.bind(this);
   }
 
+  /*
+    Pull in the Photos from the API when this component mounts.
+  */
   componentDidMount() {
     this.getPhotosFromAPI(this.props.adminId, this.props.venueId);
   }
 
+  /*
+    This will allow us to pull all the photos from the API for the current category.
 
+    Also, it will forcibly sort and rerank the photos if anything is fishy.
+  */
   getPhotosFromAPI = (adminId, venueId) => {
 
     var categoryId = this.props.category.id;
 
-    console.log("getPhotosFromAPI: " + adminId + ":" + venueId + ":" + categoryId);
-
     axios.get(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos`))
-    .then((res) => this.setState({ photos: this.sortPhotos(res.data)}) )
+    .then((res) => this.setState({ photos: this.props.sortPhotos(res.data)}) )
     .catch((err) => console.log(err.response.data) );
-
-    console.log(this.state.photos);
-
   }
 
-
-
-  /* The rank of the photos is super important.  We use this function to sort the photos by rank */
-  // sortPhotos = (photos) => {
-
-  //   function comparePhotoRank(a,b) {
-  //     if (a.rank < b.rank)
-  //       return -1;
-  //     if (a.rank > b.rank)
-  //       return 1;
-  //     return 0;
-  //   };
-
-  //   return photos.sort(comparePhotoRank);
-  // }
-
-  /* This is a hack, but maybe it's a hack that's genius */
-  sortPhotos = (photos) => {
-
-    // console.log("SORTFING PHOTOS");
-    // console.log(photos);
-
-    function comparePhotoRank(a,b) {
-      if (a.rank < b.rank)
-        return -1;
-      if (a.rank > b.rank)
-        return 1;
-      return 0;
-    };
-
-    photos.sort(comparePhotoRank);
-
-    for (let i = 0; i < photos.length; i ++) {
-      photos[i].rank = i + 1 ;
-    }
-
-    // console.log(photos);
-
-    return photos;
-    
-  }
 
   /* 
     After updating a single photo, we want to call the API to update the state.  We make
     that call as the update is returning so the app stays in sync.
   */
   updateSinglePhoto = (adminId, venueId, categoryId, photo) => {
-
-    console.log("CATEGORY Updating photo: ");
-    console.log(photo);
-
     axios.patch(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photo.id}`), photo)
     .then((res) => this.getPhotosFromAPI(adminId, venueId, categoryId))
     .catch((err) => console.log(err.response.data))
@@ -143,10 +105,6 @@ class CategoryContainer extends React.Component {
     that call as the update is returning so the app stays in sync.
   */
   deleteSinglePhoto = (adminId, venueId, categoryId, photo) => {
-
-    console.log("CATEGORY Updating photo: ");
-    console.log(photo);
-
     axios.delete(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photo.id}`), photo)
     .then((res) => this.getPhotosFromAPI(adminId, venueId, categoryId))
     .catch((err) => console.log(err.response.data))
@@ -162,52 +120,32 @@ class CategoryContainer extends React.Component {
     var originalRightPhoto = photo;
     var originalLeftPhoto = this.state.photos[photo.rank - 2];
 
-    console.log("Left/Right:");
-    console.log(originalLeftPhoto);
-    console.log(originalRightPhoto);
-
     var newRightPhotoRank = originalRightPhoto.rank - 1;
     var newLeftPhotoRank = originalLeftPhoto.rank + 1;
 
-    console.log("New ranks (left/right): " + newLeftPhotoRank + "/" + newRightPhotoRank);
+    // Update the listOfSelectedPhotos, so that the selected status updates as well
 
     if (this.props.listOfSelectedPhotos.includes(originalRightPhoto)) {
       var photoLoc = this.props.listOfSelectedPhotos.indexOf(originalRightPhoto);
-      // console.log("Photo on the right looks like:");
-      // console.log(this.props.listOfSelectedPhotos[photoLoc]);
-      // console.log("currently rank " + this.props.listOfSelectedPhotos[photoLoc].rank + " should be " + newRightPhotoRank)
-
       this.props.listOfSelectedPhotos[photoLoc].rank = newRightPhotoRank;
-
     } 
 
     if (this.props.listOfSelectedPhotos.includes(originalLeftPhoto)) {
       var photoLoc = this.props.listOfSelectedPhotos.indexOf(originalLeftPhoto);
-      // console.log("Photo on the left looks like:");
-      // console.log(this.props.listOfSelectedPhotos[photoLoc]);
-      // console.log("currently rank " + this.props.listOfSelectedPhotos[photoLoc].rank + " should be " + newLeftPhotoRank)
-
       this.props.listOfSelectedPhotos[photoLoc].rank = newLeftPhotoRank;
     }
 
+    // Swap ranks
     originalRightPhoto.rank = newRightPhotoRank;
     originalLeftPhoto.rank = newLeftPhotoRank;
 
-    // await(this.updateSinglePhoto(adminId, venueId, categoryId, originalLeftPhoto));
-    // console.log("UPDATE 1 BETTER BE DONE");
-    // await(this.updateSinglePhoto(adminId, venueId, categoryId, originalRightPhoto));
-    // console.log("UPDATE 2 BETTER BE DONE");
-
+    // Update the API with the new photos
     await(this.updateMultiplePhotos(adminId, venueId, categoryId, [originalLeftPhoto, originalRightPhoto]));
-
-    // Update the application state with the new information
-    // this.setState({ photos: this.sortPhotos(photoList) });
-    // await(this.getPhotosFromAPI(adminId, venueId, categoryId));
   }
 
   /* 
-    Take a photo and have it swap places with the photo on its right.
-    This function needs to also update the state.listOfSelectedPhotos
+    Take a photo and have it swap places with the photo on its right.  This is done
+    by swapping the rank, updating the API, and refreshing the state.
   */
   movePhotoRight = async (adminId, venueId, categoryId, photo) => {
 
@@ -217,40 +155,24 @@ class CategoryContainer extends React.Component {
     var newRightPhotoRank = originalRightPhoto.rank - 1;
     var newLeftPhotoRank = originalLeftPhoto.rank + 1;
 
-    /* If either of these photos were selected */
+    // Update the listOfSelectedPhotos, so that the selected status updates as well
+
     if (this.props.listOfSelectedPhotos.includes(originalRightPhoto)) {
       var photoLoc = this.props.listOfSelectedPhotos.indexOf(originalRightPhoto);
-      // console.log("Photo on the right looks like:");
-      // console.log(this.props.listOfSelectedPhotos[photoLoc]);
-      // console.log("currently rank " + this.props.listOfSelectedPhotos[photoLoc].rank + " should be " + newRightPhotoRank)
-
       this.props.listOfSelectedPhotos[photoLoc].rank = newRightPhotoRank;
-
     } 
 
     if (this.props.listOfSelectedPhotos.includes(originalLeftPhoto)) {
       var photoLoc = this.props.listOfSelectedPhotos.indexOf(originalLeftPhoto);
-      // console.log("Photo on the left looks like:");
-      // console.log(this.props.listOfSelectedPhotos[photoLoc]);
-      // console.log("currently rank " + this.props.listOfSelectedPhotos[photoLoc].rank + " should be " + newLeftPhotoRank)
-
       this.props.listOfSelectedPhotos[photoLoc].rank = newLeftPhotoRank;
     }
 
+    // Swap ranks
     originalRightPhoto.rank = newRightPhotoRank;  
     originalLeftPhoto.rank = newLeftPhotoRank;
 
-    // Update the API with the new information
-
-    // await(this.updateSinglePhoto(adminId, venueId, categoryId, originalLeftPhoto));
-    // await(this.updateSinglePhoto(adminId, venueId, categoryId, originalRightPhoto));
-
+    // Update the API with the new photos
     await(this.updateMultiplePhotos(adminId, venueId, categoryId, [originalLeftPhoto, originalRightPhoto]));
-
-    // Update the application state with the new information
-    // this.setState({ photos: this.sortPhotos(photoList) });
-
-    //this.getPhotosFromAPI(adminId, venueId, categoryId);
   }
 
   /*
@@ -258,20 +180,7 @@ class CategoryContainer extends React.Component {
     rank on the photo by 1 and update it in the API.
   */
   lowerRankAndUpdate = (adminId, venueId, categoryId, photo) => {
-
-    // console.log("CURRENT ELEMENT RANK: " + photo.rank);
-
-    // var originalPhotoList = this.state.photos;
-    // console.log(originalPhotoList);
-    // var photoIndex = originalPhotoList.indexOf(photo);
-    // console.log(photoIndex);
-
     photo.rank = photo.rank - 1;
-
-    // originalPhotoList[photoIndex] = photo;
-
-    // this.setState({ photos: originalPhotoList });
-
     this.updateSinglePhoto(adminId, venueId, categoryId, photo);
   }
 
@@ -287,10 +196,6 @@ class CategoryContainer extends React.Component {
   */
   handlePhotoDelete = async (adminId, venueId, categoryId, photo) => {
 
-    console.log("BEGIN PHOTO DELETE");
-    console.log(photo);
-    console.log(this.props.listOfSelectedPhotos);
-
     var originalPhotoList = this.state.photos;
 
     //1.  TODO: Handle removing this photo from the  "select" list by SETSTATE.
@@ -299,7 +204,6 @@ class CategoryContainer extends React.Component {
     }
 
     var deletedPhotoRank = photo.rank;
-    console.log("Deleting the photo with rank " + deletedPhotoRank);
 
     /* 
       Again, it's very important that we start with the highest ranked photos FIRST,
@@ -308,8 +212,6 @@ class CategoryContainer extends React.Component {
     */
     await(originalPhotoList.reverse().forEach(async (element) => {
 
-      console.log("Looking at photo: " + element.rank + ":" + element.filename);
-
       if (element.rank === deletedPhotoRank) {
         await(this.deleteSinglePhoto(adminId, venueId, categoryId, element));
       } else if (element.rank > deletedPhotoRank) {
@@ -317,15 +219,10 @@ class CategoryContainer extends React.Component {
       }
       
     }));
-
-    console.log(this.state.photos);
-    console.log("done");
-
   }
 
   /* 
-    UncategorizedPhotoContainer doesn't have access to as many functions as
-    ScrollablePhotoContainer does.
+    UncategorizedPhotoContainer doesn't have access to the moveLeft/moveRight functions.
   */
   renderCategory = (category) => {
     if (category.name === 'Unassigned') {
@@ -344,6 +241,8 @@ class CategoryContainer extends React.Component {
           latestSelectedPhotoCategory={this.props.latestSelectedPhotoCategory}
           selectedPhotoIds={this.props.selectedPhotoIds}
           handleSinglePhotoSelect={this.props.handleSinglePhotoSelect}
+
+          moveButtonHighlighted={this.props.moveButtonHighlighted}
 
           updatePhoto = {this.props.updatePhoto}
           updateSinglePhoto = {this.updateSinglePhoto}
@@ -367,9 +266,9 @@ class CategoryContainer extends React.Component {
 
           latestSelectedPhotoCategory={this.props.latestSelectedPhotoCategory}
           selectedPhotoIds={this.props.selectedPhotoIds}
-          changeSelectedPhotoRank={this.props.changeSelectedPhotoRank}
           handleSinglePhotoSelect={this.props.handleSinglePhotoSelect}
-          removePhotoFromSelectedList={this.props.removePhotoFromSelectedList}
+
+          moveButtonHighlighted={this.props.moveButtonHighlighted}
 
           updatePhoto = {this.props.updatePhoto}
           updateSinglePhoto = {this.updateSinglePhoto}
@@ -396,12 +295,14 @@ class CategoryContainer extends React.Component {
       latestSelectedPhotoCategory,
       selectedPhotoIds,
       listOfSelectedPhotos,
-      changeSelectedPhotoRank,
       handleSinglePhotoSelect,
       removePhotoFromSelectedList,
 
+      moveButtonHighlighted,
+
       updatePhoto,
-      deletePhoto
+      deletePhoto,
+      sortPhotos
 
     } = this.props;
 

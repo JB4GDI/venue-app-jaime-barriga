@@ -8,12 +8,13 @@ import venueApi from '../helpers/venueApi';
 
 /*
   Parent: VenuesContainer
-  Child: CategoryContainer
+  Children: CategoryContainer
+            Toolbar
 
   At this point, we have a single venue, and the next thing we want to do is display all
   the categories that belong to it.  Extract them here.  
 
-  There will normally be 4 categories.
+  There will normally be 4 categories - Uncategorized, Profile, Home Rental, Planning
 */
 class SingleVenue extends React.Component {
 
@@ -24,142 +25,101 @@ class SingleVenue extends React.Component {
       totalPhotosSelected: 0,
       latestSelectedPhotoCategory: 0,
       listOfSelectedPhotos: [],
-      selectedPhotoIds: []
+      selectedPhotoIds: [],
+      moveButtonHighlighted: 0
     };
 
-    // Binding this allows us to call this function from a lower level and still have access to where we're at now
+    /*
+      Binding allows us to call these functions from other levels while providing
+      access to this component's 'this'
+    */
     this.handleSinglePhotoSelect = this.handleSinglePhotoSelect.bind(this);
     this.movePhotosToCategory = this.movePhotosToCategory.bind(this);
-    this.changeSelectedPhotoRank = this.changeSelectedPhotoRank.bind(this);
     this.removePhotoFromSelectedList = this.removePhotoFromSelectedList.bind(this);
+    // this.updateMoveButtonHighlighted = this.updateMoveButtonHighlighted.bind(this);
 
   }
 
-  /* Yes, "Categorys" isn't spelled right, but I did it in the API to follow Ruby/Rails conventions */
+  /* IMPORTANT: Yes, "Categorys" isn't spelled right, but I did it in the API to follow Ruby/Rails conventions */
   componentWillMount() {
     this.setState({ categories: this.props.venue.categorys });
   }
 
-  /* Yes, "Categorys" isn't spelled right, but I did it in the API to follow Ruby/Rails conventions */
+  /* IMPORTANT: Yes, "Categorys" isn't spelled right, but I did it in the API to follow Ruby/Rails conventions */
   componentDidMount() {
     this.setState({ categories: this.props.venue.categorys });
   }
 
-  selectme = (photoLocation) => {
-    /* If the states are different */
-    if (this.state.latestSelectedPhotoCategory !== photoLocation) {
-
-    } else {
-      //Do nothing.
-    }
-  }
-
-  /* TODO: At some point, this should be where we edit the rank of something in the state.listOfSelectedPhotos */
-  changeSelectedPhotoRank = (photo) => {
-
+  /*
+    Lets us know which move button on the toolbar is highlighted
+  */
+  updateMoveButtonHighlighted = (categoryId) => {
+    this.setState({ moveButtonHighlighted: categoryId });
   }
 
   /* 
     Given a photo as a parameter, remove it from the Selected Photo lists (state.listOfSelectedPhotos / state.selectedPhotoIds)
-
   */
   removePhotoFromSelectedList = (photo) => {
 
-    console.log("Time to remove?");
-    console.log(this.state.listOfSelectedPhotos);
-
+    /* If the photo is in the listOfSelectedPhotos[], remove it. */
     if (this.state.listOfSelectedPhotos.includes(photo)) {
-      console.log("yes");
-
       this.state.listOfSelectedPhotos.splice(this.state.listOfSelectedPhotos.indexOf(photo), 1);
-
-      console.log(this.state.listOfSelectedPhotos);
-
       this.state.totalPhotosSelected = this.state.totalPhotosSelected - 1;
-
     }
 
+    /* Next, if the photo id is in selectedPhotoIds[], remove it. */
     if (this.state.selectedPhotoIds.includes(photo.id)) {
-      // console.log("Ids?");
-      // console.log(this.state.selectedPhotoIds);
-      // console.log("ID to remove: " + photo.id);
 
       /* It is driving me crazy that this works but setState() doesn't */
       this.state.selectedPhotoIds.splice(this.state.selectedPhotoIds.indexOf(photo.id), 1);
-
-      // console.log(newPhotoIdList);
-      
-      // this.setState({ selectedPhotoIds: newPhotoIdList });
-      // console.log(this.state.selectedPhotoIds);
     }
-
-    this.componentDidMount();
-
   }
 
-  handleSinglePhotoSelect = (currentPhotoClicked, categoryId) => {
+  /*
+    When we deal with a single photo being selected, we need to
 
-    console.log("PHOTO CLICKED: " + currentPhotoClicked.id);
-    console.log(currentPhotoClicked);
-    console.log(this.state.listOfSelectedPhotos);
+    1.  See if the photo selected is in a new category
+        If it is...
+            A.  Deselect all the other photos
+            B.  Select this one and update the state
+        If it isn't...
+            A.  Add this photo to the state
+
+    The app refuses to let photos be selected across categories.
+  */
+  handleSinglePhotoSelect = (currentPhotoClicked, categoryId) => {
 
     // If the photo we clicked is in a totally new category
     if (this.state.latestSelectedPhotoCategory !== categoryId) {
 
       // This is fine, but we need to deselect all the other photos, then select this one
-      this.deselectPhotosGlobalNoSetState();
-      // console.log("GLOBAL DESELECTION");
 
-      // Bulldoze the list of selected photos, and put only this photo in it
+      // Bulldoze the list of selected photos...
       var updatedSelectedPhotoList = [currentPhotoClicked];
       var updatedSelectedPhotoId = [currentPhotoClicked.id];
 
+      // ... and put only this photo in it.  Update the state accordingly.
       this.setState({ 
         listOfSelectedPhotos: updatedSelectedPhotoList,
         selectedPhotoIds: updatedSelectedPhotoId,
         totalPhotosSelected: 1
       });
 
-      // console.log(updatedSelectedPhotoList);
-      // console.log(updatedSelectedPhotoId);
-
-      // console.log("PHOTO CLICKED END");
-
-
     } else {
 
       // We are in the same category we were in before.
 
-      // The clicked photo is already in our list
+      // If the clicked photo is already in our list
       if (this.state.listOfSelectedPhotos.includes(currentPhotoClicked)) {
 
-        // console.log("PHOTO IS ALREADY HERE");
-
-        // Remove this photo from the list of selected photos and update the state
-
-        // console.log("*******START*******");
-        // console.log(this.state.listOfSelectedPhotos);
-
-
-
+        // Remove it from the listOfSelectedPhotos[]
         const updatedSelectedPhotoList = this.state.listOfSelectedPhotos;
-
-        // console.log(updatedSelectedPhotoList);
-        // console.log("PHOTO_ID CLICKED: " + currentPhotoClicked.id);
-        // console.log("NEW LOCATION TO SPLIT: " + updatedSelectedPhotoList.indexOf(currentPhotoClicked));
-
         updatedSelectedPhotoList.splice(updatedSelectedPhotoList.indexOf(currentPhotoClicked), 1);
 
-        // console.log(updatedSelectedPhotoList);
-        // // console.log("**************");
-        // // console.log("*******START*******");
-        // console.log(this.state.selectedPhotoIds);
-
+        // Remove its id from selectedPhotoIds[]
         const updatedSelectedPhotoIds = this.state.selectedPhotoIds
         updatedSelectedPhotoIds.splice(updatedSelectedPhotoIds.indexOf(currentPhotoClicked.id), 1);
-
-        // console.log(updatedSelectedPhotoIds);
-        // console.log("*******END*******");
 
         this.setState({ 
           listOfSelectedPhotos: updatedSelectedPhotoList,
@@ -169,37 +129,21 @@ class SingleVenue extends React.Component {
 
       } else {
 
-        console.log("NEW PHOTO");
-
-        // This is a new photo so push it onto the list of selected photos and update the state
-
-        console.log("*******START*******");
-        
+        // This is a new photo so push it onto the list of selected photos and update the state        
 
         const updatedSelectedPhotoList = this.state.listOfSelectedPhotos;
-        console.log(updatedSelectedPhotoList);
         updatedSelectedPhotoList.push(currentPhotoClicked);
-        console.log(updatedSelectedPhotoList);
 
         const updatedSelectedPhotoIds = this.state.selectedPhotoIds;
-        console.log(updatedSelectedPhotoIds);
         updatedSelectedPhotoIds.push(currentPhotoClicked.id);
-        console.log(updatedSelectedPhotoIds);
-
-        console.log("*******END*******");
 
         this.setState({ 
           listOfSelectedPhotos: updatedSelectedPhotoList,
           selectedPhotoIds: updatedSelectedPhotoIds,
           totalPhotosSelected: this.state.totalPhotosSelected + 1
         });
-      }      
-
+      }
     }
-
-    // console.log(this.state.listOfSelectedPhotos);
-    // console.log(this.state.selectedPhotoIds);
-
 
     // Regardless of what happened above, store the category of the photo we just clicked.  It is the most recent
     this.setState({ 
@@ -208,50 +152,29 @@ class SingleVenue extends React.Component {
     
   }
 
-  deselectPhotosGlobalNoSetState = () => {
-    // console.log("DESELECT ALL FIRED!");
-
-    // console.log(this.state.listOfSelectedPhotos);
-
-    // console.log(this.state.listOfSelectedPhotos);
-
-    // console.log(this.refs);
-
-    // Access the "deselectAllPhotos" function in the CategoryContainer children (using childCategoryReference)
-    // for (let key in this.refs) {
-    //   this.refs[key].deselectAllPhotos();
-    // }
-
-  }
-
+  /*
+    Deselecting all photos is basically re-initializing all these state elements
+  */
   deselectPhotosGlobal = () => {
-    // console.log("DESELECT ALL FIRED!");
-
-    // console.log(this.state.listOfSelectedPhotos);
 
     var emptyArray = [];
 
     this.setState({ 
+      totalPhotosSelected: 0,
       listOfSelectedPhotos: emptyArray,
       selectedPhotoIds: emptyArray
     });
-
-    // console.log(this.state.listOfSelectedPhotos);
-
-    // console.log(this.refs);
-
-    // Access the "deselectAllPhotos" function in the CategoryContainer children (using childCategoryReference)
-    // for (let key in this.refs) {
-    //   this.refs[key].deselectAllPhotos();
-    // }
-
   }
 
   /* 
-    This function takes a list of photos and forcibly arranges and re-ranks everything.
+    This function takes a list of photos and forcibly arranges and re-ranks everything.  The app
+    refuses to have a list of photos that aren't sequentially ranked.
 
-    It is a hack so that we can quickly deal with a move where selected photos are in
+    It is totally inefficient, but it allows us to quickly deal with a move where selected photos are in
     different places in the array.
+
+    Also, I'm not expecting a single person to be uploading and sorting through millions
+    of photos, so this inefficiency shouldn't matter
   */
   sortPhotos = (photos) => {
 
@@ -265,7 +188,7 @@ class SingleVenue extends React.Component {
     };
     photos.sort(comparePhotoRank);
 
-    /* Wipe out that rank and rerank starting with 1 */
+    /* Bulldoze all ranks and rerank sequentially starting with 1 */
     for (let i = 0; i < photos.length; i ++) {
       photos[i].rank = i + 1 ;
     }
@@ -274,136 +197,104 @@ class SingleVenue extends React.Component {
   }
 
   /*
-    Here is the big one.  If we want to move a batch of selected photos, we need to...
+    Here is the big function.  If we want to move a batch of selected photos, we need to...
 
     1.  Find the list of photos at the destination
     2.  Get the highest rank at the destination
     3.  Loop through the list of selected photos
         A.  Remove these photos from the origin list
-        B.  Add these photos to the destination list, while updating rank
-        
+        B.  Add these photos to the destination list, while updating rank       
 
-    5.  Deselect everything
+    4.  Deselect everything
+
+    This function has async/awaits on the API calls because we need things to resolve in
+    a specific order
 
   */
   movePhotosToCategory = async (categoryDestinationId) => {
-
-    console.log("Move these photos to " + categoryDestinationId);
-    console.log("This should be it:");
-    console.log(this.props.venue.categorys[categoryDestinationId - 1]);
-
-    console.log("Move these photos from " + this.state.latestSelectedPhotoCategory);
-
-    console.log("This should be the origin:");
-    console.log(this.props.venue.categorys[this.state.latestSelectedPhotoCategory - 1]);
 
     /* CHEATING:  The index is always one lower than the category ID.*/
     var destinationPhotoList = this.props.venue.categorys[categoryDestinationId - 1].photos;
     var originPhotoList = this.props.venue.categorys[this.state.latestSelectedPhotoCategory - 1].photos;
 
-    console.log("destination below:");
-    console.log(destinationPhotoList);
-    console.log(originPhotoList);
-    console.log("origin above:");
-
     var highestDestinationRank = 0;
 
-    /* Ascend up the list */
+    /*
+      Ascend through the list, and find the highest rank on a photo.
+    */
     destinationPhotoList.forEach(async (element) => {
-
-      console.log(element);
-
-      console.log("current:new::" + highestDestinationRank + ":" + element.rank);
-
       if (element.rank > highestDestinationRank) {
         await(highestDestinationRank = element.rank);
       }
     });
 
-    console.log("highest destination rank: " + highestDestinationRank);
-
     var photosToMove = this.state.listOfSelectedPhotos;
 
-    console.log(photosToMove);
-
-
-    /* Remove from old category, then update the rank and move into the new category */
+    /* Remove each photo from the original category, update the rank, and move it into the new category */
     photosToMove.forEach(async (currentPhoto) => {
 
-      console.log("Currently looking at: id" + currentPhoto.id + "with rank " + currentPhoto.rank);      
-      console.log("***************");
-      console.log(currentPhoto);
-      console.log(originPhotoList);
-      console.log("***************");
-
+      // Find the photo to remove in the original list, and remove it
       originPhotoList.forEach (async (originPhoto) => {
 
-        console.log(originPhoto.id);
-
         if (originPhoto.id === currentPhoto.id) {
-          console.log("READY TO DELETE PHOTO");
-          const why = await(this.testDeletePhoto(this.props.adminId, this.props.venueId, this.state.latestSelectedPhotoCategory, currentPhoto));
+          const removePhoto = await(this.deletePhotoAndRefresh(this.props.adminId, this.props.venueId, this.state.latestSelectedPhotoCategory, currentPhoto));
         };
 
       });
 
+      // Change each photo's rank to be one higher than the 
+      // destination's current highest rank. (And then one higher than the one before it of course)
       currentPhoto.rank = highestDestinationRank + 1;
       highestDestinationRank = highestDestinationRank + 1;      
 
-      const please = await(this.testSubmitPhoto(this.props.adminId, this.props.venueId, categoryDestinationId, currentPhoto));
+      const please = await(this.submitPhotoAndRefresh(this.props.adminId, this.props.venueId, categoryDestinationId, currentPhoto));
 
     });
 
     var emptyArray = [];
 
+    // Nothing should be selected anymore so clear out the state
     this.setState({
       totalPhotosSelected: 0,
       listOfSelectedPhotos: [],
       selectedPhotoIds: []
     });
-
-
-    // console.log(originPhotoList);
-    console.log("Ready to reload");    
-
-    console.log("SHOULD BE MOUNTED NOW HMMMMM");
   }
 
   /* 
-    Is this overkill?  Yes.  But does it work?  Also yes. 
+    A function to forcibly refresh the entire app and all the children (categories).
 
-    The app gets unstable when you move a photo (delete in a location and create in another).
-    This forces a refresh of everything, and prevents the API promises from messing with us.
+    Is this overkill?  Yes.
+
+    But does it work?  Also yes. 
+
+    The app gets unstable when you move photos (delete in a location and create in another).
+    This forced refresh prevents the API promises from messing with us.
   */
   refreshAppAndChildren = () => {
 
     /* Reset the whole app */
     this.props.getAdmins();
 
-    console.log("refreshAllChildren");
+    /* Reset the children.  We've set up a "ref" below to allow us access */
     for (let key in this.refs) {
-      console.log("refreshAllChildren: + " + key);
       this.refs[key].getPhotosFromAPI(this.props.adminId, this.props.venueId);
     }
   }
 
-  /* We call a refresh on everything after this API call so the promises don't force us out of sync */
-  testDeletePhoto = (adminId, venueId, categoryId, photo) => {
-
-    console.log("APP Deleting photo: ");
-    console.log(photo);
-
+  /* 
+    We call a refresh on everything after this API call so the promises don't force us out of sync 
+  */
+  deletePhotoAndRefresh = (adminId, venueId, categoryId, photo) => {
     axios.delete(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/${photo.id}`), photo)
     .then((res) => this.refreshAppAndChildren() )
     .catch((err) => console.log(err.response.data) );
   }
 
-  /* We call a refresh on everything after this API call so the promises don't force us out of sync */
-  testSubmitPhoto = (adminId, venueId, categoryId, photo) => {
-
-    console.log("APP Submitting photo: ");
-    console.log(photo);
-
+  /* 
+    We call a refresh on everything after this API call so the promises don't force us out of sync 
+  */
+  submitPhotoAndRefresh = (adminId, venueId, categoryId, photo) => {
     axios.post(venueApi(`venueadmins/${adminId}/venues/${venueId}/categorys/${categoryId}/photos/`), photo)
     .then((res) => this.refreshAppAndChildren() )
     .catch((err) => console.log(err.response.data) );
@@ -423,7 +314,6 @@ class SingleVenue extends React.Component {
       updatePhoto,
       deletePhoto
     } = this.props;
-
     
     const categories = this.state.categories.map((categories, index) => {
       return (
@@ -446,10 +336,12 @@ class SingleVenue extends React.Component {
           changeSelectedPhotoRank={this.changeSelectedPhotoRank}
           handleSinglePhotoSelect={this.handleSinglePhotoSelect}
           removePhotoFromSelectedList={this.removePhotoFromSelectedList}
+
+          moveButtonHighlighted={this.state.moveButtonHighlighted}
           
           updatePhoto={this.props.updatePhoto}
           deletePhoto={this.props.deletePhoto}
-          
+          sortPhotos={this.sortPhotos}          
         />
       );
     });
@@ -462,12 +354,11 @@ class SingleVenue extends React.Component {
           latestSelectedPhotoCategory={this.state.latestSelectedPhotoCategory}
           selectedPhotoIds={this.state.selectedPhotoIds}
           movePhotosToCategory={this.movePhotosToCategory}
+          
+          updateMoveButtonHighlighted={this.updateMoveButtonHighlighted}
 
           submitPhoto={this.props.submitPhoto}
-
         />
-
-
       </div>
     );
   }

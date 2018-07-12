@@ -1,6 +1,13 @@
 import React from 'react';
 import SinglePhotoContainer from './SinglePhotoContainer';
 
+/*
+  Parent: CategoryContainer
+  Child: SinglePhotoContainer
+
+  An ScrollablePhotoContainer contains all the photos that are in a category with a purpose.
+  It is also scrollable.  
+*/
 class ScrollablePhotoContainer extends React.Component {
 
   render () {
@@ -15,6 +22,8 @@ class ScrollablePhotoContainer extends React.Component {
 
       latestSelectedPhotoCategory,
       handleSinglePhotoSelect,
+
+      moveButtonHighlighted,
 
       updatePhoto,
       updateSinglePhoto,
@@ -67,7 +76,7 @@ class ScrollablePhotoContainer extends React.Component {
           <h2 className="full_width">{categoryName} photos</h2>
         </div>
         
-        <div className="scrollable_photo_list fancy_border_top fl">
+        <div className={ this.props.moveButtonHighlighted === this.props.categoryId ? "scrollable_photo_list make_background_color_softgold fancy_border_top fl" : "scrollable_photo_list make_background_color_white fancy_border_top fl" }>
           {allPhotos}
         </div>
 

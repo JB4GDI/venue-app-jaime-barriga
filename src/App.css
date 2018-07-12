@@ -235,11 +235,24 @@ p, textarea {
   animation-duration: 1s;
 }
 
+.make_background_color_softgold { 
+  animation-name: make_background_color_softgold;
+  animation-duration: 0.75s;
+  animation-fill-mode: forwards;
+}
+
+.make_background_color_white { 
+  animation-name: make_background_color_white;
+  animation-duration: 0.75s;
+  animation-fill-mode: forwards;
+}
+
 /********************/
 /* HELPER FUNCTIONS */
 /********************/
 
 .background_color_gold { background-color: #bea052; }
+
 
 .center_text { text-align: center; }
 
@@ -269,6 +282,16 @@ p, textarea {
 @keyframes disappear {
   from { opacity: 1; }
   to {   opacity: 0; }
+}
+
+@keyframes make_background_color_softgold {
+  from { background-color: #fff; }
+  to {   background-color: #eee6d2; }
+}
+
+@keyframes make_background_color_white {
+  from { background-color: #eee6d2; }
+  to {   background-color: #fff; }
 }
 
 @keyframes slide_left {
