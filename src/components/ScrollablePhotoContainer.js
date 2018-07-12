@@ -33,7 +33,7 @@ class ScrollablePhotoContainer extends React.Component {
     const allPhotos = photos.map((photo, index) => {
       return (
         <SinglePhotoContainer
-          key={photo.rank - 1}
+          key={photo.id}
           index={photo.rank - 1}
           photo={photo}
           photoOnLeft={photos[photo.rank - 2]}
